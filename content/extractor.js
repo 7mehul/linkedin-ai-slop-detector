@@ -1,4 +1,4 @@
-// SlopShield — extractor.js
+// SlopShield: extractor.js
 // Pulls post text out of LinkedIn's DOM. Everything selector-shaped lives in
 // SS.SELECTORS (wordlists.js) so DOM drift is a one-block fix.
 (() => {
@@ -9,7 +9,7 @@
   const SEL = SS.SELECTORS;
 
   // All post containers in/under `root`, outermost only (a quoted repost can
-  // itself match the container selector — the outer post owns it).
+  // itself match the container selector; the outer post owns it).
   function findPosts(root) {
     const node = root && root.nodeType === 1 ? root : null;
     if (!node) return [];
@@ -27,7 +27,7 @@
     );
   }
 
-  // First text body that belongs to the OUTER poster — candidates inside a
+  // First text body that belongs to the OUTER poster; candidates inside a
   // quoted/reposted sub-update are the quoted author's words, not theirs.
   // TEXT_BODY selectors are tried in preference order (most specific first).
   function getTextBody(container) {

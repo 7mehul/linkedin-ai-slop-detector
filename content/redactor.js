@@ -1,7 +1,7 @@
-// SlopShield — redactor.js
+// SlopShield: redactor.js
 // Builds and tears down the three UI treatments: full censor-bar redaction,
 // side-eye badge, and the optional human micro-badge. All DOM is built with
-// createElement/textContent — no innerHTML anywhere near page content.
+// createElement/textContent; no innerHTML anywhere near page content.
 (() => {
   'use strict';
   const SS = (globalThis.SlopShield = globalThis.SlopShield || {});
@@ -56,13 +56,13 @@
     overlay.setAttribute('tabindex', '0');
     overlay.setAttribute('aria-label', 'Post redacted by SlopShield. Activate to reveal.');
 
-    // Case-file header — frames the redaction as an evidence exhibit.
+    // Case-file header; frames the redaction as an evidence exhibit.
     const filehead = el('div', 'slopshield-filehead');
     filehead.appendChild(el('span', 'slopshield-file-unit', '🛡 SLOPSHIELD · SLOP UNIT'));
     filehead.appendChild(el('span', 'slopshield-file-case', `CASE #${SS.caseNumber(urn)}`));
     overlay.appendChild(filehead);
 
-    // Censor strips — URN-seeded geometry so re-renders look identical.
+    // Censor strips; URN-seeded geometry so re-renders look identical.
     const rng = rngFor(urn + ':strips');
     const stripCount = 3 + (rng() > 0.5 ? 1 : 0);
     for (let i = 0; i < stripCount; i++) {
@@ -112,7 +112,7 @@
     hostEl.classList.remove('slopshield-host-redacted');
 
     const bar = el('div', 'slopshield-strip-bar');
-    bar.appendChild(el('span', 'slopshield-strip-label', `⚠️ revealed slop — score ${score}/100`));
+    bar.appendChild(el('span', 'slopshield-strip-label', `⚠️ revealed slop · score ${score}/100`));
     const btn = el('button', 'slopshield-rebutton', 're-redact');
     btn.type = 'button';
     btn.addEventListener('click', (e) => {
@@ -157,7 +157,7 @@
       const panel = el('div', 'slopshield-panel');
       panel.appendChild(el('div', 'slopshield-panel-title', 'top slop signals'));
       const top = (breakdown || []).filter((r) => r.weighted > 0).slice(0, 3);
-      if (top.length === 0) panel.appendChild(el('div', 'slopshield-panel-row', 'nothing fired hard — borderline vibes'));
+      if (top.length === 0) panel.appendChild(el('div', 'slopshield-panel-row', 'nothing fired hard; borderline vibes'));
       for (const r of top) {
         const row = el('div', 'slopshield-panel-row');
         const name = el('div', 'slopshield-panel-name');
@@ -188,7 +188,7 @@
     } else if (tier === 'sideeye') {
       buildBadge(container, info);
     }
-    // 'human' tier: nothing to add — removeUI above already cleared any prior UI.
+    // 'human' tier: nothing to add; removeUI above already cleared any prior UI.
   }
 
   SS.redactor = { apply, removeUI, hasUI, verdictFor };

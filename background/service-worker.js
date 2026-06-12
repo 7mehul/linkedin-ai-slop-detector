@@ -1,5 +1,5 @@
-// SlopShield — service worker.
-// One job: reset the per-session slop counter. Settings need no seeding —
+// SlopShield: service worker.
+// One job: reset the per-session slop counter. Settings need no seeding;
 // every storage read in the extension passes inline defaults.
 // Both listeners matter: onStartup does NOT fire on install/enable/reload,
 // and onInstalled does not fire on browser launch.

@@ -1,4 +1,4 @@
-// SlopShield test runner — `npm test`.
+// SlopShield test runner: `npm test`.
 // Prints a calibration table for every fixture, then runs hard assertions.
 // Zero dependencies; loads the engine exactly the way Chrome does (classic
 // scripts attaching to globalThis.SlopShield), minus the DOM-touching files.
@@ -6,7 +6,7 @@
 
 const path = require('path');
 
-// Engine load order mirrors manifest.json (DOM files excluded — they need a document).
+// Engine load order mirrors manifest.json (DOM files excluded; they need a document).
 require(path.join(__dirname, '..', 'content', 'wordlists.js'));
 require(path.join(__dirname, '..', 'content', 'signals.js'));
 require(path.join(__dirname, '..', 'content', 'scorer.js'));
@@ -40,7 +40,7 @@ console.log(
 console.log('  ' + '─'.repeat(96));
 for (const { fixture, result } of rows) {
   console.log(
-    `  ${fixture.name.padEnd(34)}${fixture.expect.padEnd(12)}${String(result.total).padEnd(7)}${(result.bonusApplied ? 'x1.15' : '—').padEnd(7)}${rows.find((r) => r.fixture === fixture).top3}`
+    `  ${fixture.name.padEnd(34)}${fixture.expect.padEnd(12)}${String(result.total).padEnd(7)}${(result.bonusApplied ? 'x1.15' : '-').padEnd(7)}${rows.find((r) => r.fixture === fixture).top3}`
   );
 }
 console.log('  ' + '─'.repeat(96));
@@ -60,7 +60,7 @@ for (const { fixture, skip, result } of rows) {
   } else if (fixture.expect === 'human') {
     assert(result.total <= 35, `${fixture.name}: human must score ≤ 35, got ${result.total}`);
   }
-  // Borderlines are printed for eyeballing, not asserted — that is the bit.
+  // Borderlines are printed for eyeballing, not asserted; that is the bit.
 }
 
 // --- assertions: engine invariants ---------------------------------------------
@@ -214,7 +214,7 @@ for (const f of FIXTURES) {
   }
 
   // The reported regression: thrilled-bullets has no em-dashes, so the em-dash
-  // signal must not fire — which structurally makes an em-dash verdict impossible.
+  // signal must not fire; which structurally makes an em-dash verdict impossible.
   const tb = SS.scorePost(FIXTURES.find((f) => f.name === 'slop-thrilled-bullets').text);
   const emDashRow = tb.breakdown.find((r) => r.key === 'emDash');
   assert(!emDashRow || emDashRow.weighted === 0, 'thrilled-bullets must not fire the em-dash signal');
@@ -231,13 +231,46 @@ for (const f of FIXTURES) {
   assert(r1.total === r2.total, 'scorePost must be deterministic');
 }
 
+// Dogfood: the em-dash police must not be an em-dash crime scene. Every file a
+// user can read ships with zero em/en dashes. Exempt because they are functional:
+// signals.js (the detection regex), fixtures.js and harness.html (test data that
+// exists to simulate slop).
+{
+  const fs = require('fs');
+  const CLEAN_FILES = [
+    'README.md',
+    'PRIVACY.md',
+    'store/LISTING.md',
+    'manifest.json',
+    'package.json',
+    'LICENSE',
+    'content/wordlists.js',
+    'content/scorer.js',
+    'content/extractor.js',
+    'content/redactor.js',
+    'content/content.js',
+    'content/styles.css',
+    'popup/popup.html',
+    'popup/popup.js',
+    'popup/popup.css',
+    'background/service-worker.js',
+    'scripts/gen-icons.js',
+  ];
+  for (const rel of CLEAN_FILES) {
+    const full = path.join(__dirname, '..', rel);
+    if (!fs.existsSync(full)) continue; // store docs land later in the build
+    const body = fs.readFileSync(full, 'utf8');
+    assert(!/[—–]/.test(body), `${rel}: contains an em/en dash; the em-dash police must be clean`);
+  }
+}
+
 // --- summary -------------------------------------------------------------------
 
 if (failures.length) {
-  console.error(`  FAIL — ${failures.length} assertion(s):\n`);
+  console.error(`  FAIL; ${failures.length} assertion(s):\n`);
   for (const f of failures) console.error(`   ✗ ${f}`);
   console.error('');
   process.exitCode = 1;
 } else {
-  console.log('  PASS — all assertions green.\n');
+  console.log('  PASS; all assertions green.\n');
 }

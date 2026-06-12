@@ -1,4 +1,4 @@
-// SlopShield — scorer.js
+// SlopShield: scorer.js
 // Tokenizes once, runs every signal, applies weights + the broetry×phrases bonus,
 // and owns the threshold math. Also home to the pure helpers shared with the DOM
 // layer (text serializer, FNV-1a, mulberry32) so they stay Node-testable.
@@ -12,7 +12,7 @@
   // The 12 signals span ~3 distinct slop sub-genres (broetry-viral, corporate-AI
   // essay, listicle-bait); a post maxing one sub-genre fires only ~half the total
   // weight. The gain maps "fully one sub-genre" onto the redaction band. Tuned
-  // against test/fixtures.js — this is the calibration knob, not the signals.
+  // against test/fixtures.js; this is the calibration knob, not the signals.
   const CALIBRATION_GAIN = 1.5;
 
   // --- shared pure helpers ---------------------------------------------------
@@ -58,7 +58,7 @@
       if (n.nodeType !== 1) return;
       const tag = (n.tagName || '').toUpperCase();
       const cls = typeof n.className === 'string' ? n.className : '';
-      // Skip our own injected UI — but never the root: when the overlay host IS
+      // Skip our own injected UI; but never the root: when the overlay host IS
       // the text body, the body itself carries .slopshield-host, and bailing on
       // it would serialize every redacted post to '' on re-process.
       if (n !== node && cls.indexOf('slopshield-') !== -1) return;
@@ -92,7 +92,7 @@
 
   function precompute(text) {
     const raw = String(text == null ? '' : text).trim().slice(0, MAX_ANALYZED_CHARS);
-    // Apostrophe-normalized lowercase view — LinkedIn emits curly ’, every
+    // Apostrophe-normalized lowercase view; LinkedIn emits curly ’, every
     // phrase list and the contraction regex assume straight '.
     const lower = raw.toLowerCase().replace(/[’‘]/g, "'");
     const rawLines = raw.split(/\r?\n/);
@@ -163,7 +163,7 @@
     return candidates[Math.floor(rand() * candidates.length)];
   };
 
-  // Plain-English names of the top firing signals — the "flagged for: …" line.
+  // Plain-English names of the top firing signals; the "flagged for: …" line.
   SS.topReasons = function topReasons(breakdown, n) {
     return (breakdown || [])
       .filter((r) => r.weighted > 0)
@@ -171,7 +171,7 @@
       .map((r) => r.name);
   };
 
-  // A shareable severity grade for the score — punchier than a bare number on
+  // A shareable severity grade for the score; punchier than a bare number on
   // the stamp ("TIER: WEAPONS-GRADE" travels further than "84/100").
   SS.tierLabel = function tierLabel(score) {
     if (score >= 90) return 'WEAPONS-GRADE';
@@ -181,7 +181,7 @@
     return 'TRACE';
   };
 
-  // Stable faux case number from the URN — turns each redaction into an
+  // Stable faux case number from the URN; turns each redaction into an
   // "evidence exhibit" and reads as intentional, not random.
   SS.caseNumber = function caseNumber(urn) {
     const h = SS.fnv1a(String(urn)).toString(36).toUpperCase();
@@ -194,7 +194,7 @@
     tone: 'medium',
   };
 
-  // The popup exposes three named modes instead of a raw slider — the tool is
+  // The popup exposes three named modes instead of a raw slider; the tool is
   // "vibes with math on top", so a calibrated dial would be lying about its
   // precision. Each maps to a sensitivity the engine already understands:
   //   chill  → redact ≥ 80 (only egregious slop)

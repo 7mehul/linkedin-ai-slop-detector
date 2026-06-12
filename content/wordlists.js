@@ -1,4 +1,4 @@
-// SlopShield — wordlists.js
+// SlopShield: wordlists.js
 // Phrase lists, verdict packs, and every LinkedIn DOM selector in one place.
 // All matching downstream is lowercase + apostrophe-normalized (’ → ').
 // Loaded as a classic script in the content-script world AND via require() in Node tests.
@@ -7,7 +7,7 @@
   const SS = (globalThis.SlopShield = globalThis.SlopShield || {});
 
   // ---------------------------------------------------------------------------
-  // LinkedIn DOM selectors — the single most drift-prone artifact in the project.
+  // LinkedIn DOM selectors; the single most drift-prone artifact in the project.
   // When LinkedIn ships a redesign, this block is the only thing that should need edits.
   // ---------------------------------------------------------------------------
   SS.SELECTORS = {
@@ -18,14 +18,14 @@
     // Post body text candidates, in preference order.
     TEXT_BODY:
       '.update-components-text, .feed-shared-update-v2__description, .feed-shared-inline-show-more-text, .feed-shared-text',
-    // Wrappers holding a quoted/reposted update — text inside these belongs to the
+    // Wrappers holding a quoted/reposted update; text inside these belongs to the
     // quoted author, not the outer poster, so it is excluded from scoring.
     QUOTED_UPDATE:
       '.update-components-mini-update-v2, .feed-shared-update-v2__update-content-wrapper, .update-components-mini-update',
     // The "…see more" clamp wrapper (max-height + overflow:hidden). The redaction
     // overlay must be hosted ABOVE this element or the stamp gets clipped.
     CLAMP_WRAPPER: '.feed-shared-inline-show-more-text',
-    // Feed scroll container — used for the zero-posts sanity warning.
+    // Feed scroll container; used for the zero-posts sanity warning.
     FEED_SCROLL: '.scaffold-finite-scroll__content',
   };
 
@@ -117,7 +117,7 @@
   ];
 
   // The delve-family. Per-word, word-boundary matched (so "delves" hits via stem
-  // entries below where useful). "journey" counts as-is per spec — no travel
+  // entries below where useful). "journey" counts as-is per spec; no travel
   // disambiguation, the false positives are part of the bit.
   SS.AI_VOCAB = [
     'delve',
@@ -177,7 +177,7 @@
   // Single-word fake hedges, word-boundary matched.
   SS.FAKE_HEDGE_WORDS = ['essentially', 'ultimately', 'fundamentally', 'arguably'];
 
-  // Genuine-uncertainty markers — evidence of an actual human typing. Negative signal.
+  // Genuine-uncertainty markers; evidence of an actual human typing. Negative signal.
   // Word-boundary matched (short tokens would otherwise match inside words).
   SS.REAL_UNCERTAINTY = [
     'idk',
@@ -200,7 +200,7 @@
     'take this with a grain of salt',
   ];
 
-  // Vague-anecdote openers — the unfalsifiable parable cast.
+  // Vague-anecdote openers; the unfalsifiable parable cast.
   SS.VAGUE_ANECDOTE = [
     'a colleague once',
     'someone i mentored',
@@ -215,7 +215,7 @@
     'a stranger on the train',
   ];
 
-  // Expanded (uncontracted) forms — counted as contraction *opportunities not taken*.
+  // Expanded (uncontracted) forms; counted as contraction *opportunities not taken*.
   SS.EXPANDED_FORMS = [
     'do not',
     'does not',
@@ -254,7 +254,7 @@
   // Verdict packs. Rule for every line: roast the WRITING, never the writer.
   // Each tone has a `generic` pool (accurate for any slop) plus pools keyed by
   // signal. A signal-specific verdict (e.g. EM-DASH CRIME SCENE) is only ever
-  // eligible when that signal is one of the post's top firing signals — so the
+  // eligible when that signal is one of the post's top firing signals; so the
   // stamp can never accuse a post of a tell it doesn't have. The pick is
   // URN-seeded, so the same post always wears the same stamp. See SS.pickVerdict.
   // Signal keys must match SS.SIGNALS[].key in signals.js.

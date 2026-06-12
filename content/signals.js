@@ -1,7 +1,7 @@
-// SlopShield — signals.js
+// SlopShield: signals.js
 // Twelve pure signal functions. Each takes the shared `pre` (precomputed analysis,
 // built once per post in scorer.js) and returns a score in [0, 1].
-// No DOM, no chrome.*, no state — loadable in Node for tests.
+// No DOM, no chrome.*, no state; loadable in Node for tests.
 (() => {
   'use strict';
   const SS = (globalThis.SlopShield = globalThis.SlopShield || {});
@@ -34,7 +34,7 @@
   };
 
   // Contractions, curly-apostrophe-safe (pre.lower is apostrophe-normalized).
-  // Deliberately excludes bare possessive 's — only real contraction forms count.
+  // Deliberately excludes bare possessive 's; only real contraction forms count.
   const CONTRACTION_RE =
     /\b(?:(?:don|doesn|didn|can|won|wouldn|couldn|shouldn|isn|aren|wasn|weren|haven|hasn|ain)'t|(?:it|that|there|here|what|let)'s|i'(?:m|ve|ll|d)|(?:we|you|they)'(?:re|ve|ll|d)|(?:he|she|who)'(?:s|ll|d))\b/g;
 
@@ -45,7 +45,7 @@
       key: 'broetry',
       name: 'broetry formatting',
       weight: 14,
-      // One sentence per line, blank line between each — the LinkedIn signature.
+      // One sentence per line, blank line between each; the LinkedIn signature.
       fn(pre) {
         const lines = pre.rawLines;
         const nonEmptyIdx = [];
@@ -167,7 +167,7 @@
           if (/^\s*\d+[.)]\s/.test(line)) numberedLines++;
         }
         let score = bulletLines >= 3 ? 1 : bulletLines === 2 ? 0.6 : bulletLines === 1 ? 0.2 : 0;
-        // Numbered listicle cadence ("1. ... 2. ... 3. ...") — slightly weaker tell.
+        // Numbered listicle cadence ("1. ... 2. ... 3. ..."); slightly weaker tell.
         if (numberedLines >= 3) score = Math.max(score, 0.8);
         const listicle = new RegExp(`\\b\\d+ ${W.LISTICLE_NOUNS}\\b|\\bhere are \\d+\\b`);
         if (listicle.test(pre.lower)) score += 0.4;

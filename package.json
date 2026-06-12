@@ -5,7 +5,9 @@
   "description": "Chrome extension that redacts LinkedIn slop with a censor bar and a snarky stamp. Detects the dialect, not the AI.",
   "scripts": {
     "test": "node test/run-tests.js",
-    "icons": "node scripts/gen-icons.js"
+    "icons": "node scripts/gen-icons.js",
+    "package": "rm -rf dist && mkdir -p dist && zip -rq dist/slopshield-$npm_package_version.zip manifest.json content popup background icons LICENSE -x '*.DS_Store' && unzip -l dist/slopshield-$npm_package_version.zip",
+    "shots": "bash scripts/store-shots.sh"
   },
   "license": "MIT"
 }

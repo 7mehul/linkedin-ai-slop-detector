@@ -1,5 +1,5 @@
 // SlopShield popup. Talks to the content scripts exclusively through
-// chrome.storage — no tab messaging, no extra permissions.
+// chrome.storage; no tab messaging, no extra permissions.
 'use strict';
 
 const SS = globalThis.SlopShield; // scorer.js loaded first: DEFAULT_SETTINGS, thresholds
@@ -13,6 +13,16 @@ const storage =
     ? chrome.storage
     : (() => {
         const stores = { sync: {}, local: {} };
+        // ?demo seeds the report card so store screenshots show real-looking
+        // numbers. Only reachable in the static-server fallback, never in Chrome.
+        if (new URLSearchParams(location.search).has('demo')) {
+          stores.local = {
+            session: 23,
+            allTime: 1204,
+            sessionSignals: { broetry: 11, slopPhrases: 7, emojiBullets: 5 },
+            sessionWorst: 94,
+          };
+        }
         const area = (n) => ({
           get: (d) => Promise.resolve(Object.assign({}, d, stores[n])),
           set: (o) => {
@@ -67,10 +77,10 @@ function topCrime(sessionSignals) {
 function renderReceipt(d) {
   $('receipt-count').textContent = d.session;
   $('receipt-alltime').textContent = d.allTime;
-  $('receipt-crime').textContent = topCrime(d.sessionSignals) || '—';
+  $('receipt-crime').textContent = topCrime(d.sessionSignals) || 'none yet';
   $('receipt-worst').textContent = d.sessionWorst
     ? `${d.sessionWorst}/100 · ${SS.tierLabel(d.sessionWorst)}`
-    : '—';
+    : 'none yet';
 }
 
 // --- init ---------------------------------------------------------------------

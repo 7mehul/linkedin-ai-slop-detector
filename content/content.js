@@ -1,8 +1,8 @@
-// SlopShield — content.js
+// SlopShield: content.js
 // Entry point: watches the feed, runs the pipeline (extract → score → redact),
 // reacts live to settings changes, and keeps the slop counters.
 // Observer strategy: watch document.body permanently with a callback that only
-// queues nodes — all matching/scoring is deferred to idle slices so the hot
+// queues nodes; all matching/scoring is deferred to idle slices so the hot
 // path never blocks scroll. Immune to LinkedIn swapping the feed container.
 (() => {
   'use strict';
@@ -29,7 +29,7 @@
     typeof chrome !== 'undefined' && !!(chrome.storage && chrome.storage.sync);
 
   // Every chrome.storage call goes through try/catch: after an extension reload,
-  // orphaned content scripts throw "Extension context invalidated" — go inert.
+  // orphaned content scripts throw "Extension context invalidated"; go inert.
   async function loadSettings() {
     if (!hasChrome) return;
     try {
@@ -81,7 +81,7 @@
   function processPost(container) {
     const ext = SS.extractor.extract(container);
     if (!ext) {
-      // A re-render may have removed the text body — don't leave stale UI.
+      // A re-render may have removed the text body; don't leave stale UI.
       SS.redactor.removeUI(container);
       container.setAttribute('data-slopshield', 'skipped');
       return;
@@ -94,7 +94,7 @@
       return;
     }
 
-    // Cache hit requires the SAME urn — LinkedIn recycles nodes for new posts,
+    // Cache hit requires the SAME urn; LinkedIn recycles nodes for new posts,
     // and a recycled node with a stale score is worse than no cache at all.
     let entry = cache.get(container);
     if (!entry || entry.urn !== ext.urn || entry.skipped) {
@@ -172,7 +172,7 @@
   }
 
   // Re-evaluate everything currently in the DOM (settings changed, toggle, etc.).
-  // WeakMaps aren't iterable — walk the DOM and look nodes up instead.
+  // WeakMaps aren't iterable; walk the DOM and look nodes up instead.
   function applyAll(forceRebuild) {
     if (!settings.enabled) {
       for (const c of document.querySelectorAll('[data-slopshield]')) SS.redactor.removeUI(c);
@@ -200,7 +200,7 @@
           if (key in settings) {
             settings[key] = changes[key].newValue;
             any = true;
-            // Tone changes the stamp text on posts whose tier doesn't change —
+            // Tone changes the stamp text on posts whose tier doesn't change;
             // that needs a forced re-render, not just a re-threshold.
             if (key === 'tone') rebuild = true;
           }
@@ -225,7 +225,7 @@
 
     const observer = new MutationObserver((mutations) => {
       for (const m of mutations) {
-        // A mutation that adds/removes our own UI is self-inflicted churn — skip it,
+        // A mutation that adds/removes our own UI is self-inflicted churn; skip it,
         // otherwise injecting an overlay would re-trigger processing of its own post.
         let ours = false;
         for (const node of m.addedNodes) {
@@ -238,7 +238,7 @@
         for (const node of m.removedNodes) if (isOurs(node)) ours = true;
         if (ours) continue;
         // The mutation target locates the owning post even when LinkedIn recycles a
-        // container in place (swaps inner content, including text-only changes) — so
+        // container in place (swaps inner content, including text-only changes); so
         // the post gets reprocessed and the URN-staleness check runs.
         const tgt = m.target;
         if (tgt && tgt.nodeType === 1 && tgt.closest) {
@@ -255,7 +255,7 @@
       if (!pathnameAllowed() || !/^\/feed(\/|$)/.test(location.pathname)) return;
       if (SS.extractor.findPosts(document.body).length === 0) {
         console.warn(
-          'SlopShield: LinkedIn changed their DOM again — selectors in content/wordlists.js need updating. ' +
+          'SlopShield: LinkedIn changed their DOM again; selectors in content/wordlists.js need updating. ' +
             'Run SlopShield.extractor.debugScan() in this console to investigate.'
         );
       }

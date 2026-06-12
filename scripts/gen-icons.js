@@ -1,4 +1,4 @@
-// SlopShield icon generator — zero dependencies, hand-assembled PNGs.
+// SlopShield icon generator: zero dependencies, hand-assembled PNGs.
 // Motif: a paper-colored rounded square wearing three black censor bars.
 // The PNGs are committed; users never need to run this. `npm run icons`.
 'use strict';
