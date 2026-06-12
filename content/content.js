@@ -21,6 +21,8 @@
   const state = { revealed: new Set(), animated: new Set() }; // urn sets, session-only
   const counted = new Set(); // urns already counted toward the slop counter (this tab)
   let pendingDelta = 0;
+  const pendingSignals = {}; // signalKey -> redactions not yet flushed (the "feed report")
+  let pendingWorst = 0; // highest score not yet flushed
   let flushTimer = null;
 
   const hasChrome =
@@ -46,11 +48,24 @@
       const delta = pendingDelta;
       if (!delta || inert) return;
       pendingDelta = 0;
+      const signalsDelta = Object.assign({}, pendingSignals);
+      const worst = pendingWorst;
+      for (const k in pendingSignals) delete pendingSignals[k];
+      pendingWorst = 0;
       try {
-        const cur = await chrome.storage.local.get({ allTime: 0, session: 0 });
+        const cur = await chrome.storage.local.get({
+          allTime: 0,
+          session: 0,
+          sessionSignals: {},
+          sessionWorst: 0,
+        });
+        const mergedSignals = Object.assign({}, cur.sessionSignals);
+        for (const k in signalsDelta) mergedSignals[k] = (mergedSignals[k] || 0) + signalsDelta[k];
         await chrome.storage.local.set({
           allTime: cur.allTime + delta,
           session: cur.session + delta,
+          sessionSignals: mergedSignals,
+          sessionWorst: Math.max(cur.sessionWorst, worst),
         });
       } catch (e) {
         inert = true;
@@ -103,6 +118,9 @@
     if (tier === 'redact' && !counted.has(ext.urn)) {
       counted.add(ext.urn);
       pendingDelta++;
+      const top = entry.breakdown.find((r) => r.weighted > 0);
+      if (top) pendingSignals[top.key] = (pendingSignals[top.key] || 0) + 1;
+      if (entry.score > pendingWorst) pendingWorst = entry.score;
       scheduleCounterFlush();
     }
   }

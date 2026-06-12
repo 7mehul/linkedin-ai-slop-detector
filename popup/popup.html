@@ -18,8 +18,20 @@
   </label>
 </header>
 
-<section class="counter">
-  <span id="counter-line">🛡 0 posts redacted this session · 0 all time</span>
+<section class="receipt">
+  <div class="receipt-head">
+    <span>🛡 FEED REPORT</span>
+    <span class="receipt-head-sub">THIS SESSION</span>
+  </div>
+  <div class="receipt-hero">
+    <span class="receipt-count" id="receipt-count">0</span>
+    <span class="receipt-count-sub">posts<br>redacted</span>
+  </div>
+  <div class="receipt-rows">
+    <div class="receipt-row"><span class="rk">top crime</span><span class="rv" id="receipt-crime">—</span></div>
+    <div class="receipt-row"><span class="rk">worst offender</span><span class="rv" id="receipt-worst">—</span></div>
+    <div class="receipt-row"><span class="rk">all time</span><span class="rv" id="receipt-alltime">0</span></div>
+  </div>
 </section>
 
 <section class="control">
@@ -48,6 +60,8 @@
   <a href="https://github.com/7mehul/linkedin-ai-slop-detector" target="_blank" rel="noreferrer">github</a>
 </footer>
 
+<script src="../content/wordlists.js"></script>
+<script src="../content/signals.js"></script>
 <script src="../content/scorer.js"></script>
 <script src="popup.js"></script>
 </body>

@@ -28,7 +28,12 @@ const enabledEl = $('enabled');
 const thresholdNoteEl = $('threshold-note');
 const modeEl = $('mode');
 const toneEl = $('tone');
-const counterEl = $('counter-line');
+
+// Signal key → plain-English name, for the "top crime" line.
+const signalName = {};
+for (const s of SS.SIGNALS) signalName[s.key] = s.name;
+
+const RECEIPT_DEFAULTS = { session: 0, allTime: 0, sessionSignals: {}, sessionWorst: 0 };
 
 function renderTone(tone) {
   for (const btn of toneEl.querySelectorAll('button')) {
@@ -47,8 +52,25 @@ function renderMode(sensitivity) {
   thresholdNoteEl.textContent = `redacting at score ≥ ${t.redact} · side-eye at ≥ ${t.sideEye}`;
 }
 
-function renderCounter({ session, allTime }) {
-  counterEl.textContent = `🛡 ${session} posts redacted this session · ${allTime} all time`;
+function topCrime(sessionSignals) {
+  let best = null;
+  let bestN = 0;
+  for (const k in sessionSignals) {
+    if (sessionSignals[k] > bestN) {
+      bestN = sessionSignals[k];
+      best = k;
+    }
+  }
+  return best ? signalName[best] || best : null;
+}
+
+function renderReceipt(d) {
+  $('receipt-count').textContent = d.session;
+  $('receipt-alltime').textContent = d.allTime;
+  $('receipt-crime').textContent = topCrime(d.sessionSignals) || '—';
+  $('receipt-worst').textContent = d.sessionWorst
+    ? `${d.sessionWorst}/100 · ${SS.tierLabel(d.sessionWorst)}`
+    : '—';
 }
 
 // --- init ---------------------------------------------------------------------
@@ -59,12 +81,12 @@ storage.sync.get(DEFAULTS).then((settings) => {
   renderTone(settings.tone);
 });
 
-storage.local.get({ session: 0, allTime: 0 }).then(renderCounter);
+storage.local.get(RECEIPT_DEFAULTS).then(renderReceipt);
 
-// Live counter while the popup is open.
+// Live report while the popup is open.
 storage.onChanged.addListener((changes, area) => {
   if (area !== 'local') return;
-  storage.local.get({ session: 0, allTime: 0 }).then(renderCounter);
+  storage.local.get(RECEIPT_DEFAULTS).then(renderReceipt);
 });
 
 // --- controls -----------------------------------------------------------------

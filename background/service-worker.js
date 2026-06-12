@@ -6,7 +6,7 @@
 'use strict';
 
 function resetSessionCounter() {
-  chrome.storage.local.set({ session: 0 });
+  chrome.storage.local.set({ session: 0, sessionSignals: {}, sessionWorst: 0 });
 }
 
 chrome.runtime.onStartup.addListener(resetSessionCounter);

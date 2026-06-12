@@ -87,7 +87,8 @@ Click the toolbar icon:
 - **Mode** — Chill / Default / Everyone's a Robot. Moves the redaction threshold live:
   Chill redacts only the most egregious slop; Everyone's a Robot is maximum paranoia.
 - **Verdict tone** — Mild / Medium / Unhinged
-- **Slop counter** — posts redacted this session and all time
+- **Feed report** — a screenshottable session receipt: posts redacted, your feed's
+  top crime, the worst offender's score + tier, and the all-time count
 
 Verdicts are seeded per-post, so the same post always wears the same stamp.
 
