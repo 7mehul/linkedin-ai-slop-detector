@@ -10,23 +10,35 @@
   // LinkedIn DOM selectors; the single most drift-prone artifact in the project.
   // When LinkedIn ships a redesign, this block is the only thing that should need edits.
   // ---------------------------------------------------------------------------
+  // Two generations of LinkedIn DOM are covered, new first:
+  // 2026 stack: hashed class names, posts in div[data-lazy-mount-id] wrappers
+  //   under [data-testid="mainFeed"], text in span[data-testid="expandable-text-box"]
+  //   (the span itself carries the line-clamp), stable per-post key in a
+  //   componentkey attribute ("feed-commentary_...").
+  // Classic stack: .feed-shared-update-v2 containers with data-urn attributes.
   SS.SELECTORS = {
-    // One feed post. data-urn / data-id carry "urn:li:activity:..." and are the
-    // most stable hooks LinkedIn exposes.
+    // One feed post.
     POST_CONTAINER:
-      'div.feed-shared-update-v2, [data-urn^="urn:li:activity"], [data-id^="urn:li:activity"]',
-    // Post body text candidates, in preference order.
+      'div[data-lazy-mount-id], div.feed-shared-update-v2, [data-urn^="urn:li:activity"], [data-id^="urn:li:activity"]',
+    // Post body text candidates, in preference order (most specific first).
     TEXT_BODY:
-      '.update-components-text, .feed-shared-update-v2__description, .feed-shared-inline-show-more-text, .feed-shared-text',
+      '[data-testid="expandable-text-box"], .update-components-text, .feed-shared-update-v2__description, .feed-shared-inline-show-more-text, .feed-shared-text',
     // Wrappers holding a quoted/reposted update; text inside these belongs to the
-    // quoted author, not the outer poster, so it is excluded from scoring.
+    // quoted author, not the outer poster, so it is excluded from scoring. In the
+    // new stack the outer commentary always precedes quoted content in DOM order,
+    // so first-match keeps reposts correct there too.
     QUOTED_UPDATE:
       '.update-components-mini-update-v2, .feed-shared-update-v2__update-content-wrapper, .update-components-mini-update',
-    // The "…see more" clamp wrapper (max-height + overflow:hidden). The redaction
-    // overlay must be hosted ABOVE this element or the stamp gets clipped.
-    CLAMP_WRAPPER: '.feed-shared-inline-show-more-text',
+    // The "...see more" clamp (overflow hidden). In the new stack the clamp IS the
+    // text box span; in the classic stack it is a wrapper div. Either way the
+    // redaction overlay must be hosted ABOVE it or the stamp gets clipped.
+    CLAMP_WRAPPER: '[data-testid="expandable-text-box"], .feed-shared-inline-show-more-text',
+    // The "...more" expander control; excluded from serialized post text.
+    EXPAND_BUTTON: '[data-testid="expandable-text-button"]',
+    // Stable per-post identity in the new stack (componentkey attribute prefix).
+    COMMENTARY_KEY: '[componentkey^="feed-commentary"]',
     // Feed scroll container; used for the zero-posts sanity warning.
-    FEED_SCROLL: '.scaffold-finite-scroll__content',
+    FEED_SCROLL: '[data-testid="mainFeed"], .scaffold-finite-scroll__content',
   };
 
   // ---------------------------------------------------------------------------

@@ -19,12 +19,17 @@
     return out.filter((el, _, arr) => !arr.some((other) => other !== el && other.contains(el)));
   }
 
-  function getUrn(container) {
-    return (
-      container.getAttribute('data-urn') ||
-      container.getAttribute('data-id') ||
-      null
-    );
+  // Post identity, oldest hooks first: classic data-urn/data-id attributes, then
+  // the new stack's stable componentkey on the commentary element. The caller
+  // falls back to a text hash when neither exists.
+  function getUrn(container, bodyEl) {
+    const attr = container.getAttribute('data-urn') || container.getAttribute('data-id');
+    if (attr) return attr;
+    const keyed =
+      (bodyEl && bodyEl.closest(SEL.COMMENTARY_KEY)) ||
+      container.querySelector(SEL.COMMENTARY_KEY);
+    if (keyed) return 'ck:' + keyed.getAttribute('componentkey');
+    return null;
   }
 
   // First text body that belongs to the OUTER poster; candidates inside a
@@ -54,11 +59,12 @@
   function extract(container) {
     const bodyEl = getTextBody(container);
     if (!bodyEl) return null;
-    const text = SS.serializeText(bodyEl)
+    const text = SS.serializeText(bodyEl, SEL.EXPAND_BUTTON)
       .replace(/\s*(?:…|\.\.\.)?\s*see more\s*$/i, '')
+      .replace(/(?:…|\.\.\.)\s*more\s*$/i, '')
       .trim();
     if (!text) return null; // pure repost with no outer commentary
-    const urn = getUrn(container) || 'txt:' + SS.fnv1a(text.slice(0, 80));
+    const urn = getUrn(container, bodyEl) || 'txt:' + SS.fnv1a(text.slice(0, 80));
     return { urn, bodyEl, hostEl: getHost(bodyEl, container), text };
   }
 

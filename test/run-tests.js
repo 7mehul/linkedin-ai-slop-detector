@@ -170,6 +170,21 @@ for (const f of FIXTURES) {
     hostedOut === 'Still readable.' && !hostedOut.includes('NOT THIS'),
     `serializeText must not skip the root node: ${JSON.stringify(hostedOut)}`
   );
+  // skipSelector prunes matching elements (the "...more" expander button on the
+  // new LinkedIn stack); nodes without .matches (plain test trees) are unaffected.
+  const expander = {
+    nodeType: 1,
+    tagName: 'BUTTON',
+    className: '',
+    childNodes: [text('…more')],
+    matches: (sel) => sel.indexOf('expandable-text-button') !== -1,
+  };
+  const clamped = el('SPAN', '', [text('Real post text.'), expander]);
+  const clampedOut = SS.serializeText(clamped, '[data-testid="expandable-text-button"]');
+  assert(
+    clampedOut.trim() === 'Real post text.' && !clampedOut.includes('more'),
+    `serializeText must prune skipSelector matches: ${JSON.stringify(clampedOut)}`
+  );
 }
 
 // Determinism: URN-seeded RNG is stable (same post → same verdict forever).

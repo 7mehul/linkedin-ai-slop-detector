@@ -16,7 +16,7 @@
   .harness-bar input[type="range"] { width: 140px; accent-color: #f5c84c; }
   .harness-bar select { background: #2a2a2a; color: #ece9e2; border: 1px solid #3a3a3a; border-radius: 4px; padding: 2px 6px; }
   main { max-width: 555px; margin: 18px auto 80px; }
-  .feed-shared-update-v2 { background: #fff; border-radius: 8px; box-shadow: 0 0 0 1px rgba(0,0,0,.08); margin-bottom: 10px; padding: 12px 16px; }
+  .feed-shared-update-v2, .mock-card { background: #fff; border-radius: 8px; box-shadow: 0 0 0 1px rgba(0,0,0,.08); margin-bottom: 10px; padding: 12px 16px; }
   .post-head { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; }
   .avatar { width: 48px; height: 48px; border-radius: 50%; background: #d6cebd; display: flex; align-items: center; justify-content: center; font-weight: 800; color: #5a5346; flex: none; }
   .pname { font-weight: 700; font-size: 14px; color: #1c1c1c; }
@@ -149,6 +149,19 @@
       <div class="update-components-text"><span class="break-words">Congrats to the team — huge launch day! 🎉</span></div>
     </div>
     <div class="post-actions"><span>👍 Like</span><span>💬 Comment</span><span>♻️ Repost</span></div>
+  </div>
+
+  <!-- 12. NEW-STACK post (2026 DOM): hashed classes, lazy-mount wrapper,
+       expandable-text-box span that is its own clamp, componentkey identity.
+       No classic class names anywhere. Expect: REDACTED. -->
+  <div data-lazy-mount-id="mock-new-dom" style="display:contents">
+    <div class="mock-card">
+      <div class="post-head"><div class="avatar">NV</div><div><div class="pname">Nova Paradigm</div><div class="psub">Chief Vision Officer | Architect of Tomorrow</div></div></div>
+      <div componentkey="feed-commentary_mock-new-dom-1">
+        <p style="margin: 0;"><span data-testid="expandable-text-box" style="display: block; max-height: 60px; overflow: hidden;">I'm humbled to announce that our journey just reached a transformative milestone. 🚀<br><br>Here are 5 lessons from building in silence:<br><br>🚀 Leverage every setback into momentum<br>✅ Foster a holistic culture of excellence<br>💡 Embark on the journey before you feel ready<br><br>It is not about the destination. It is about the tapestry we weave along the way.<br><br>Let that sink in.<br><br>If this resonated, repost it ♻️<button data-testid="expandable-text-button">…more</button></span></p>
+      </div>
+      <div class="post-actions"><span>👍 Like</span><span>💬 Comment</span><span>♻️ Repost</span></div>
+    </div>
   </div>
 
 </div>

@@ -47,7 +47,10 @@
     'BLOCKQUOTE', 'PRE', 'TR', 'SECTION', 'ARTICLE',
   ]);
 
-  SS.serializeText = function serializeText(node) {
+  // `skipSelector` (optional) prunes matching elements from the walk, e.g.
+  // LinkedIn's "...more" expander button. Ignored on nodes without .matches
+  // (the hand-built trees in Node tests).
+  SS.serializeText = function serializeText(node, skipSelector) {
     let out = '';
     const walk = (n) => {
       if (!n) return;
@@ -62,6 +65,14 @@
       // the text body, the body itself carries .slopshield-host, and bailing on
       // it would serialize every redacted post to '' on re-process.
       if (n !== node && cls.indexOf('slopshield-') !== -1) return;
+      if (
+        skipSelector &&
+        n !== node &&
+        typeof n.matches === 'function' &&
+        n.matches(skipSelector)
+      ) {
+        return;
+      }
       if (tag === 'BR') {
         out += '\n';
         return;
