@@ -24,7 +24,7 @@
   // Remove every trace of SlopShield UI from one post container.
   function removeUI(container) {
     for (const n of container.querySelectorAll(
-      '.slopshield-overlay, .slopshield-strip-bar, .slopshield-badge, .slopshield-panel, .slopshield-human'
+      '.slopshield-overlay, .slopshield-strip-bar, .slopshield-badge, .slopshield-panel'
     )) {
       n.remove();
     }
@@ -41,10 +41,7 @@
         : !!container.querySelector('.slopshield-overlay');
     }
     if (tier === 'sideeye') return !!container.querySelector('.slopshield-badge');
-    if (tier === 'human') {
-      return settings.humanBadge ? !!container.querySelector('.slopshield-human') : true;
-    }
-    return true;
+    return true; // 'human' tier wears no UI
   }
 
   // --- full redaction ---------------------------------------------------------
@@ -173,10 +170,8 @@
       else buildOverlay(container, info, settings, state);
     } else if (tier === 'sideeye') {
       buildBadge(container, info);
-    } else if (tier === 'human' && settings.humanBadge) {
-      info.hostEl.classList.add('slopshield-host');
-      info.hostEl.appendChild(el('span', 'slopshield-human', '🫡 human'));
     }
+    // 'human' tier: nothing to add — removeUI above already cleared any prior UI.
   }
 
   SS.redactor = { apply, removeUI, hasUI, verdictFor };

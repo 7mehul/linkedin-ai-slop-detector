@@ -55,10 +55,11 @@ Each post is scored 0–100 by 12 weighted signals:
 | Zero verifiable details | 6 | Vague parables ("a mentor once told me") with no specifics |
 
 Posts that max both broetry *and* slop phrases get a ×1.15 kill-shot bonus. The
-sensitivity slider moves the redaction threshold (default is deliberately aggressive);
-mid-scorers get a 🤨 side-eye badge with a signal breakdown instead of the full
-censor bar. Skipped entirely: posts under 120 characters, non-English posts, and
-pure reposts with no commentary (only the *reposter's* words are ever scored).
+**mode** (Chill / Default / Everyone's a Robot) moves the redaction threshold
+(default is deliberately aggressive); mid-scorers get a 🤨 side-eye badge with a
+signal breakdown instead of the full censor bar. Skipped entirely: posts under 120
+characters, non-English posts, and pure reposts with no commentary (only the
+*reposter's* words are ever scored).
 
 ## The science (sort of)
 
@@ -83,11 +84,10 @@ deliberately unhinged:
 Click the toolbar icon:
 
 - **Master toggle** — instant on/off, no reload
-- **Sensitivity** (0–100, default 65) — "chill" ⟷ "everyone is a robot", re-thresholds
-  live
+- **Mode** — Chill / Default / Everyone's a Robot. Moves the redaction threshold live:
+  Chill redacts only the most egregious slop; Everyone's a Robot is maximum paranoia.
 - **Verdict tone** — Mild / Medium / Unhinged
 - **Slop counter** — posts redacted this session and all time
-- **🫡 human badges** — optionally badge posts that pass (off by default, gets noisy)
 
 Verdicts are seeded per-post, so the same post always wears the same stamp.
 

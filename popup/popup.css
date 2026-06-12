@@ -51,18 +51,7 @@ h1 {
 }
 .value { font-weight: 900; color: #f5c84c; }
 
-input[type='range'] {
-  width: 100%;
-  accent-color: #f5c84c;
-  margin: 2px 0 4px;
-}
-.range-labels {
-  display: flex;
-  justify-content: space-between;
-  font-size: 10px;
-  color: #8a857c;
-}
-.threshold-note { margin: 6px 0 0; font-size: 10px; color: #6f6a62; }
+.threshold-note { margin: 8px 0 0; font-size: 10px; color: #6f6a62; }
 
 .segmented { display: flex; gap: 6px; }
 .segmented button {
@@ -80,6 +69,19 @@ input[type='range'] {
   background: #ece9e2;
   color: #101010;
   border-color: #ece9e2;
+}
+/* Mode buttons carry a long label ("Everyone's a Robot") — let it wrap and
+   keep all three the same height. */
+.segmented.modes button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 4px 6px;
+  font-size: 10.5px;
+  line-height: 1.15;
+  white-space: normal;
+  text-align: center;
 }
 
 .control.row {

@@ -182,9 +182,9 @@
           if (key in settings) {
             settings[key] = changes[key].newValue;
             any = true;
-            // Tone changes the stamp text; humanBadge adds/removes badges on
-            // posts whose tier doesn't change — both need a forced re-render.
-            if (key === 'tone' || key === 'humanBadge') rebuild = true;
+            // Tone changes the stamp text on posts whose tier doesn't change —
+            // that needs a forced re-render, not just a re-threshold.
+            if (key === 'tone') rebuild = true;
           }
         }
         if (any) applyAll(rebuild);

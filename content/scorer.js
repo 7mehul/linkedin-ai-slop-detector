@@ -149,6 +149,33 @@
     enabled: true,
     sensitivity: 65,
     tone: 'medium',
-    humanBadge: false,
+  };
+
+  // The popup exposes three named modes instead of a raw slider — the tool is
+  // "vibes with math on top", so a calibrated dial would be lying about its
+  // precision. Each maps to a sensitivity the engine already understands:
+  //   chill  → redact ≥ 80 (only egregious slop)
+  //   default→ redact ≥ 67.5
+  //   robot  → redact ≥ 50 (maximum paranoia)
+  SS.PRESETS = [
+    { key: 'chill', label: 'Chill', sensitivity: 40 },
+    { key: 'default', label: 'Default', sensitivity: 65 },
+    { key: 'robot', label: "Everyone's a Robot", sensitivity: 100 },
+  ];
+
+  // Map any stored sensitivity back to its nearest preset (for highlighting the
+  // active mode, and for migrating users who had a custom slider value).
+  SS.presetForSensitivity = function presetForSensitivity(n) {
+    const v = Number(n);
+    let best = SS.PRESETS[1];
+    let bestDist = Infinity;
+    for (const p of SS.PRESETS) {
+      const d = Math.abs(p.sensitivity - v);
+      if (d < bestDist) {
+        bestDist = d;
+        best = p;
+      }
+    }
+    return best;
   };
 })();

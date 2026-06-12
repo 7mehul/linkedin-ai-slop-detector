@@ -25,11 +25,9 @@ const storage =
 
 const $ = (id) => document.getElementById(id);
 const enabledEl = $('enabled');
-const sensEl = $('sensitivity');
-const sensValueEl = $('sensitivity-value');
 const thresholdNoteEl = $('threshold-note');
+const modeEl = $('mode');
 const toneEl = $('tone');
-const humanEl = $('humanBadge');
 const counterEl = $('counter-line');
 
 function renderTone(tone) {
@@ -38,12 +36,15 @@ function renderTone(tone) {
   }
 }
 
-function renderThresholdNote(sensitivity) {
-  const t = SS.thresholds(sensitivity);
-  thresholdNoteEl.textContent =
-    t.redact >= 100
-      ? 'redacting only perfect 100s — basically off'
-      : `redacting at score ≥ ${t.redact} · side-eye at ≥ ${t.sideEye}`;
+// Highlight the active mode (derived from the stored sensitivity) and describe
+// what it does in one line.
+function renderMode(sensitivity) {
+  const active = SS.presetForSensitivity(sensitivity);
+  for (const btn of modeEl.querySelectorAll('button')) {
+    btn.classList.toggle('active', btn.dataset.mode === active.key);
+  }
+  const t = SS.thresholds(active.sensitivity);
+  thresholdNoteEl.textContent = `redacting at score ≥ ${t.redact} · side-eye at ≥ ${t.sideEye}`;
 }
 
 function renderCounter({ session, allTime }) {
@@ -54,10 +55,7 @@ function renderCounter({ session, allTime }) {
 
 storage.sync.get(DEFAULTS).then((settings) => {
   enabledEl.checked = settings.enabled;
-  humanEl.checked = settings.humanBadge;
-  sensEl.value = settings.sensitivity;
-  sensValueEl.textContent = settings.sensitivity;
-  renderThresholdNote(settings.sensitivity);
+  renderMode(settings.sensitivity);
   renderTone(settings.tone);
 });
 
@@ -75,18 +73,13 @@ enabledEl.addEventListener('change', () => {
   storage.sync.set({ enabled: enabledEl.checked });
 });
 
-humanEl.addEventListener('change', () => {
-  storage.sync.set({ humanBadge: humanEl.checked });
-});
-
-// Debounced: storage.sync allows ~120 writes/min, a slider drag emits hundreds.
-let sensTimer = null;
-sensEl.addEventListener('input', () => {
-  const v = Number(sensEl.value);
-  sensValueEl.textContent = v;
-  renderThresholdNote(v);
-  clearTimeout(sensTimer);
-  sensTimer = setTimeout(() => storage.sync.set({ sensitivity: v }), 250);
+modeEl.addEventListener('click', (e) => {
+  const btn = e.target.closest('button[data-mode]');
+  if (!btn) return;
+  const preset = SS.PRESETS.find((p) => p.key === btn.dataset.mode);
+  if (!preset) return;
+  renderMode(preset.sensitivity);
+  storage.sync.set({ sensitivity: preset.sensitivity });
 });
 
 toneEl.addEventListener('click', (e) => {

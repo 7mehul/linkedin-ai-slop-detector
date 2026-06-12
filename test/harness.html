@@ -39,7 +39,6 @@
     <option value="unhinged">unhinged</option>
   </select></label>
   <label><input id="hb-enabled" type="checkbox" checked> enabled</label>
-  <label><input id="hb-human" type="checkbox"> human badges</label>
 </div>
 
 <main>
@@ -199,7 +198,6 @@
   });
   $('hb-tone').addEventListener('change', (e) => chrome.storage.sync.set({ tone: e.target.value }));
   $('hb-enabled').addEventListener('change', (e) => chrome.storage.sync.set({ enabled: e.target.checked }));
-  $('hb-human').addEventListener('change', (e) => chrome.storage.sync.set({ humanBadge: e.target.checked }));
 </script>
 
 </body>

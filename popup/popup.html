@@ -23,12 +23,12 @@
 </section>
 
 <section class="control">
-  <div class="control-head">
-    <label for="sensitivity">SENSITIVITY</label>
-    <span class="value" id="sensitivity-value">65</span>
+  <div class="control-head"><label>MODE</label></div>
+  <div class="segmented modes" id="mode">
+    <button type="button" data-mode="chill">Chill</button>
+    <button type="button" data-mode="default">Default</button>
+    <button type="button" data-mode="robot">Everyone's a Robot</button>
   </div>
-  <input type="range" id="sensitivity" min="0" max="100" value="65">
-  <div class="range-labels"><span>chill</span><span>everyone is a robot</span></div>
   <p class="threshold-note" id="threshold-note"></p>
 </section>
 
@@ -39,14 +39,6 @@
     <button type="button" data-tone="medium">Medium</button>
     <button type="button" data-tone="unhinged">Unhinged</button>
   </div>
-</section>
-
-<section class="control row">
-  <label for="humanBadge">🫡 badge posts that pass as human</label>
-  <label class="switch small">
-    <input type="checkbox" id="humanBadge">
-    <span class="slider-ui"></span>
-  </label>
 </section>
 
 <footer class="about">
