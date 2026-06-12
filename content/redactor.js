@@ -56,6 +56,12 @@
     overlay.setAttribute('tabindex', '0');
     overlay.setAttribute('aria-label', 'Post redacted by SlopShield. Activate to reveal.');
 
+    // Case-file header — frames the redaction as an evidence exhibit.
+    const filehead = el('div', 'slopshield-filehead');
+    filehead.appendChild(el('span', 'slopshield-file-unit', '🛡 SLOPSHIELD · SLOP UNIT'));
+    filehead.appendChild(el('span', 'slopshield-file-case', `CASE #${SS.caseNumber(urn)}`));
+    overlay.appendChild(filehead);
+
     // Censor strips — URN-seeded geometry so re-renders look identical.
     const rng = rngFor(urn + ':strips');
     const stripCount = 3 + (rng() > 0.5 ? 1 : 0);
@@ -73,13 +79,19 @@
     if (reasons.length) {
       stamp.appendChild(el('span', 'slopshield-reasons', `flagged for: ${reasons.join(' · ')}`));
     }
-    stamp.appendChild(el('span', 'slopshield-meta', `SLOP SCORE: ${score}/100 · TAP TO REVEAL`));
+    stamp.appendChild(el('span', 'slopshield-meta', `SLOP SCORE ${score}/100 · TIER: ${SS.tierLabel(score)}`));
+    stamp.appendChild(el('span', 'slopshield-hint', 'tap to reveal'));
     if (!state.animated.has(urn)) {
       stamp.classList.add('slopshield-slam');
       state.animated.add(urn);
     }
     overlay.appendChild(stamp);
-    overlay.appendChild(el('div', 'slopshield-watermark', '🛡 SLOPSHIELD'));
+
+    // Watermark doubles as the growth loop: every screenshot says where to get it.
+    const wm = el('div', 'slopshield-watermark');
+    wm.appendChild(el('span', 'slopshield-wm-brand', '🛡 SLOPSHIELD'));
+    wm.appendChild(el('span', 'slopshield-wm-url', 'github.com/7mehul/linkedin-ai-slop-detector'));
+    overlay.appendChild(wm);
 
     const onReveal = (e) => {
       e.preventDefault();

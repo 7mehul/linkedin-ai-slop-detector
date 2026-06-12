@@ -95,6 +95,17 @@ assert(!('humanBadge' in SS.DEFAULT_SETTINGS), 'humanBadge removed from default 
 assert(SS.thresholds(40).redact === 80, 'chill preset redacts at ≥ 80');
 assert(SS.thresholds(100).redact === 50, 'robot preset redacts at ≥ 50');
 
+// Shareable framing: tier labels and stable case numbers.
+assert(SS.tierLabel(95) === 'WEAPONS-GRADE', 'tier 95 → WEAPONS-GRADE');
+assert(SS.tierLabel(84) === 'INDUSTRIAL-GRADE', 'tier 84 → INDUSTRIAL-GRADE');
+assert(SS.tierLabel(72) === 'CERTIFIED', 'tier 72 → CERTIFIED');
+assert(/^LI-[0-9A-Z]{4}$/.test(SS.caseNumber('urn:li:activity:7000000000000000001')), 'case number format');
+assert(
+  SS.caseNumber('urn:x') === SS.caseNumber('urn:x') &&
+    SS.caseNumber('urn:x') !== SS.caseNumber('urn:y'),
+  'case number stable per urn, distinct across urns'
+);
+
 // Skip gates.
 assert(SS.shouldSkip('too short to judge').skip, 'short text must skip');
 assert(

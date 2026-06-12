@@ -171,6 +171,23 @@
       .map((r) => r.name);
   };
 
+  // A shareable severity grade for the score — punchier than a bare number on
+  // the stamp ("TIER: WEAPONS-GRADE" travels further than "84/100").
+  SS.tierLabel = function tierLabel(score) {
+    if (score >= 90) return 'WEAPONS-GRADE';
+    if (score >= 80) return 'INDUSTRIAL-GRADE';
+    if (score >= 70) return 'CERTIFIED';
+    if (score >= 60) return 'PROBABLE';
+    return 'TRACE';
+  };
+
+  // Stable faux case number from the URN — turns each redaction into an
+  // "evidence exhibit" and reads as intentional, not random.
+  SS.caseNumber = function caseNumber(urn) {
+    const h = SS.fnv1a(String(urn)).toString(36).toUpperCase();
+    return 'LI-' + (h + '0000').slice(0, 4);
+  };
+
   SS.DEFAULT_SETTINGS = {
     enabled: true,
     sensitivity: 65,
