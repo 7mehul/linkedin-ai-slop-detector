@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="popup.css">
+</head>
+<body>
+
+<header class="head">
+  <div class="logo">🛡</div>
+  <div>
+    <h1>SLOPSHIELD</h1>
+    <p class="tagline">Redacting LinkedIn slop since 2026.</p>
+  </div>
+  <label class="switch" title="Master toggle">
+    <input type="checkbox" id="enabled">
+    <span class="slider-ui"></span>
+  </label>
+</header>
+
+<section class="counter">
+  <span id="counter-line">🛡 0 posts redacted this session · 0 all time</span>
+</section>
+
+<section class="control">
+  <div class="control-head">
+    <label for="sensitivity">SENSITIVITY</label>
+    <span class="value" id="sensitivity-value">65</span>
+  </div>
+  <input type="range" id="sensitivity" min="0" max="100" value="65">
+  <div class="range-labels"><span>chill</span><span>everyone is a robot</span></div>
+  <p class="threshold-note" id="threshold-note"></p>
+</section>
+
+<section class="control">
+  <div class="control-head"><label>VERDICT TONE</label></div>
+  <div class="segmented" id="tone">
+    <button type="button" data-tone="mild">Mild</button>
+    <button type="button" data-tone="medium">Medium</button>
+    <button type="button" data-tone="unhinged">Unhinged</button>
+  </div>
+</section>
+
+<section class="control row">
+  <label for="humanBadge">🫡 badge posts that pass as human</label>
+  <label class="switch small">
+    <input type="checkbox" id="humanBadge">
+    <span class="slider-ui"></span>
+  </label>
+</section>
+
+<footer class="about">
+  <p>SlopShield detects the <em>LinkedIn-slop dialect</em>, not AI itself. It will
+  absolutely flag sincere humans who write like robots. That's the bit.
+  Nothing leaves your browser.</p>
+  <a href="https://github.com/7mehul/linkedin-ai-slop-detector" target="_blank" rel="noreferrer">github</a>
+</footer>
+
+<script src="../content/scorer.js"></script>
+<script src="popup.js"></script>
+</body>
+</html>

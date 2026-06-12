@@ -1,7 +1,114 @@
-# LinkedIn AI Slop Detector
+# 🛡 SlopShield
 
-Detects AI-generated "slop" in LinkedIn posts.
+**A Chrome extension that scans your LinkedIn feed, scores every post against a battery
+of "AI-slop dialect" heuristics, and slams a censor-bar redaction over the offenders —
+complete with a snarky verdict stamp.**
 
-## Status
+> CERTIFIED SLOP · SLOP SCORE: 84/100 · TAP TO REVEAL
 
-Early scaffold — work in progress.
+*(screenshot/GIF placeholder — redacted feed goes here)*
+
+## What this is (and isn't)
+
+This is a comedy project. **SlopShield does not detect AI.** It detects the
+*LinkedIn-slop dialect* — a writing style that correlates heavily with AI-assisted
+posting but also catches humans who write like that on purpose. It will absolutely
+flag sincere people who type "I'm thrilled to announce" with their own ten fingers.
+**That's the bit. False positives are a feature.**
+
+One rule is load-bearing: SlopShield roasts the *writing*, never the *writer*. Every
+verdict judges the post ("EM-DASH CRIME SCENE"), not the person. Scores are vibes
+with math on top — do not use SlopShield output to accuse actual humans of anything.
+
+## Install
+
+1. `git clone https://github.com/7mehul/linkedin-ai-slop-detector.git`
+2. Open `chrome://extensions`
+3. Toggle **Developer mode** (top right)
+4. **Load unpacked** → select the cloned folder
+5. Open (or reload) [linkedin.com/feed](https://www.linkedin.com/feed/) and scroll
+
+No build step. No dependencies. If you reload the extension while LinkedIn tabs are
+open, reload those tabs too — Chrome doesn't re-inject content scripts into pages
+that were already open.
+
+## How it works
+
+Everything runs locally in the content script. **Zero network calls, zero analytics,
+zero data collection. Nothing leaves your browser.**
+
+Each post is scored 0–100 by 12 weighted signals:
+
+| Signal | Weight | What it catches |
+|---|---|---|
+| Broetry formatting | 14 | One sentence per line, blank line between each |
+| Slop phrases | 13 | "I'm thrilled to announce", "Let that sink in", "game-changer"… |
+| Uniform sentence rhythm | 10 | Low burstiness — humans vary sentence length, slop doesn't |
+| Em-dash abuse | 8 | The signature punctuation — you know the one — everywhere |
+| Contrast-hook constructions | 8 | "It's not X. It's Y.", "Stop doing X. Start doing Y." |
+| Delve-family vocabulary | 8 | delve, tapestry, leverage, seamless, transformative… |
+| Contraction avoidance | 7 | "do not / it is" where a human would contract |
+| Emoji-bullet listicle | 7 | 🚀 ✅ 💡 bullets, "Here are 7 truths…" |
+| Engagement-bait closer | 7 | "Agree?", "Thoughts?", "Repost if ♻️" |
+| Epistemic flatness | 6 | Formulaic hedges; genuine "idk / tbh" subtracts |
+| Rule-of-three constructions | 6 | "First… Second… Third…", triadic lists |
+| Zero verifiable details | 6 | Vague parables ("a mentor once told me") with no specifics |
+
+Posts that max both broetry *and* slop phrases get a ×1.15 kill-shot bonus. The
+sensitivity slider moves the redaction threshold (default is deliberately aggressive);
+mid-scorers get a 🤨 side-eye badge with a signal breakdown instead of the full
+censor bar. Skipped entirely: posts under 120 characters, non-English posts, and
+pure reposts with no commentary (only the *reposter's* words are ever scored).
+
+## The science (sort of)
+
+The signals are grounded in real published findings; the *threshold calibration* is
+deliberately unhinged:
+
+- Kobak, D., González-Márquez, R., Horvát, E.-Á., Lause, J. —
+  *Delving into LLM-assisted writing in biomedical publications through excess
+  vocabulary.* Science Advances 11, eadt3813 (2025). The post-ChatGPT explosion of
+  "delve", "intricate", "commendable" et al.
+- Liang, W. et al. — *Monitoring AI-Modified Content at Scale: A Case Study on the
+  Impact of ChatGPT on AI Conference Peer Reviews.* ICML 2024. Same vocabulary
+  effect, measured in the wild.
+- Jakesch, M., Hancock, J. T., Naaman, M. — *Human heuristics for AI-generated
+  language are flawed.* PNAS 120(11), e2208839120 (2023). Formality and
+  contraction-avoidance as (mis)judged AI tells.
+- GPTZero's burstiness work — humans vary sentence length; generated text is
+  metronomic.
+
+## Settings
+
+Click the toolbar icon:
+
+- **Master toggle** — instant on/off, no reload
+- **Sensitivity** (0–100, default 65) — "chill" ⟷ "everyone is a robot", re-thresholds
+  live
+- **Verdict tone** — Mild / Medium / Unhinged
+- **Slop counter** — posts redacted this session and all time
+- **🫡 human badges** — optionally badge posts that pass (off by default, gets noisy)
+
+Verdicts are seeded per-post, so the same post always wears the same stamp.
+
+## Development
+
+```bash
+npm test          # calibration table + assertions over test/fixtures.js
+npm run icons     # regenerate icons/ (zero-dep PNG writer)
+```
+
+Open `test/harness.html` from any static server for a mock feed with the real
+pipeline running — no LinkedIn login needed.
+
+LinkedIn's DOM rots. Every selector lives in one block (`SS.SELECTORS` in
+[content/wordlists.js](content/wordlists.js)); when the feed changes, fix it there
+and nowhere else. `SlopShield.extractor.debugScan()` in the DevTools console prints
+what the extractor currently sees.
+
+## Disclaimer
+
+Scores are vibes with math on top. Do not use SlopShield output to accuse actual
+humans of anything. Roast posts, not people.
+
+MIT — see [LICENSE](LICENSE).

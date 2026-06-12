@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SlopShield — dev harness</title>
+<!-- Real extension stylesheet, loaded exactly as the manifest would. -->
+<link rel="stylesheet" href="../content/styles.css">
+<style>
+  /* Harness-only chrome: a fake LinkedIn feed. Class names on the post cards are
+     LinkedIn's real ones so extractor.js runs unmodified. */
+  body { margin: 0; background: #f4f2ee; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
+  .harness-bar { position: sticky; top: 0; z-index: 50; display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+    background: #101010; color: #ece9e2; padding: 10px 16px; font-size: 12px; font-weight: 600; }
+  .harness-bar .hb-title { font-weight: 900; letter-spacing: 2px; }
+  .harness-bar input[type="range"] { width: 140px; accent-color: #f5c84c; }
+  .harness-bar select { background: #2a2a2a; color: #ece9e2; border: 1px solid #3a3a3a; border-radius: 4px; padding: 2px 6px; }
+  main { max-width: 555px; margin: 18px auto 80px; }
+  .feed-shared-update-v2 { background: #fff; border-radius: 8px; box-shadow: 0 0 0 1px rgba(0,0,0,.08); margin-bottom: 10px; padding: 12px 16px; }
+  .post-head { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; }
+  .avatar { width: 48px; height: 48px; border-radius: 50%; background: #d6cebd; display: flex; align-items: center; justify-content: center; font-weight: 800; color: #5a5346; flex: none; }
+  .pname { font-weight: 700; font-size: 14px; color: #1c1c1c; }
+  .psub { font-size: 12px; color: #666; }
+  .update-components-text { font-size: 14px; line-height: 1.5; color: #1c1c1c; overflow-wrap: break-word; }
+  .post-actions { display: flex; gap: 22px; border-top: 1px solid #ebebeb; margin-top: 12px; padding-top: 8px; color: #5f5f5f; font-size: 13px; font-weight: 600; }
+  .clamp-demo { position: relative; }
+  .see-more-btn { background: none; border: none; color: #5f5f5f; font-weight: 600; cursor: pointer; padding: 2px 0; }
+  .harness-note { max-width: 555px; margin: 12px auto; font-size: 11px; color: #8a857c; text-align: center; }
+</style>
+</head>
+<body>
+
+<div class="harness-bar">
+  <span class="hb-title">🛡 SLOPSHIELD HARNESS</span>
+  <label>sensitivity <input id="hb-sens" type="range" min="0" max="100" value="65"> <span id="hb-sensv">65</span></label>
+  <label>tone <select id="hb-tone">
+    <option value="mild">mild</option>
+    <option value="medium" selected>medium</option>
+    <option value="unhinged">unhinged</option>
+  </select></label>
+  <label><input id="hb-enabled" type="checkbox" checked> enabled</label>
+  <label><input id="hb-human" type="checkbox"> human badges</label>
+</div>
+
+<main>
+<div class="scaffold-finite-scroll__content">
+
+  <!-- 1. maximal broetry — expect: REDACTED -->
+  <div class="feed-shared-update-v2" data-urn="urn:li:activity:7000000000000000001">
+    <div class="post-head"><div class="avatar">BS</div><div><div class="pname">Blake Synergson</div><div class="psub">Founder | Keynote Speaker | 5x LinkedIn Top Voice</div></div></div>
+    <div class="feed-shared-update-v2__description-wrapper">
+      <div class="update-components-text"><span class="break-words">I made a mistake.<br><br>For 6 years, I said yes to every meeting.<br><br>Every single one.<br><br>My calendar was full — but my impact was empty.<br><br>Then I tried something different.<br><br>I deleted every recurring meeting without an agenda.<br><br>The result?<br><br>My team shipped more in one month than the entire previous quarter.<br><br>It’s not about doing more. It’s about doing what matters.<br><br>Stop attending. Start deciding.<br><br>Busy is not the same as valuable — it never was.<br><br>Read that again.<br><br>Agree?</span></div>
+    </div>
+    <div class="post-actions"><span>👍 Like</span><span>💬 Comment</span><span>♻️ Repost</span></div>
+  </div>
+
+  <!-- 2. thrilled + emoji bullets — expect: REDACTED -->
+  <div class="feed-shared-update-v2" data-urn="urn:li:activity:7000000000000000002">
+    <div class="post-head"><div class="avatar">HM</div><div><div class="pname">Hunter Momentum</div><div class="psub">Building in public 🚀 | Ex-everything</div></div></div>
+    <div class="feed-shared-update-v2__description-wrapper">
+      <div class="update-components-text"><span class="break-words">I’m thrilled to announce that after 4 years of building in silence, we just crossed 10,000 users. 🚀<br><br>Here are 5 lessons from the journey:<br><br>🚀 Ship before you feel ready<br>✅ Listen to churned users, not happy ones<br>💡 Distribution beats product<br>🔥 Hire slow, fire fast<br>📈 Momentum is the only moat<br><br>None of this would be possible without this incredible community.<br><br>If this resonated, repost it ♻️<br><br>Follow me for more lessons from the trenches.</span></div>
+    </div>
+    <div class="post-actions"><span>👍 Like</span><span>💬 Comment</span><span>♻️ Repost</span></div>
+  </div>
+
+  <!-- 3. corporate AI essay inside a "…see more" CLAMP — expect: REDACTED, stamp NOT clipped -->
+  <div class="feed-shared-update-v2" data-urn="urn:li:activity:7000000000000000003">
+    <div class="post-head"><div class="avatar">PV</div><div><div class="pname">Preston Vantage</div><div class="psub">VP of Strategic Synergies</div></div></div>
+    <div class="feed-shared-update-v2__description-wrapper">
+      <div class="feed-shared-inline-show-more-text clamp-demo" style="max-height: 92px; overflow: hidden;">
+        <div class="update-components-text"><span class="break-words">In today’s rapidly evolving landscape, the ability to leverage AI is no longer optional — it is essential. Organizations that delve into these transformative tools will unlock unprecedented value. Those that do not will struggle to remain relevant. It will reshape strategy, culture, and execution.<br><br>It is important to note that this shift is not about replacing people. It is about elevating them. When teams harness these robust capabilities, they do not simply move faster — they fundamentally reimagine what is possible.<br><br>Ultimately, the journey toward seamless adoption requires a holistic approach. Leaders must foster a culture of continuous learning. They must embark on this path with intention — and they must navigate the landscape with meticulous planning and groundbreaking vision.<br><br>Let’s dive in. The future will not wait. Agree?</span></div>
+        <button class="see-more-btn" type="button">…see more</button>
+      </div>
+    </div>
+    <div class="post-actions"><span>👍 Like</span><span>💬 Comment</span><span>♻️ Repost</span></div>
+  </div>
+
+  <!-- 4. network parable — expect: REDACTED -->
+  <div class="feed-shared-update-v2" data-urn="urn:li:activity:7000000000000000004">
+    <div class="post-head"><div class="avatar">MC</div><div><div class="pname">Marlow Catalyst</div><div class="psub">Mindset Architect | DM "GROWTH" for my framework</div></div></div>
+    <div class="feed-shared-update-v2__description-wrapper">
+      <div class="update-components-text"><span class="break-words">A mentor once told me something I will never forget.<br><br>"Your network is your net worth."<br><br>I laughed.<br><br>Then I got laid off in 2020.<br><br>No warning — no severance — nothing.<br><br>Guess who got me my next role?<br><br>Not my resume.<br><br>Not my degree.<br><br>A stranger on the train I had helped two years earlier.<br><br>It’s not what you know. It’s who helped you when it mattered.<br><br>Let that sink in.<br><br>Your network is the only resume that matters.<br><br>Nobody talks about this.<br><br>Thoughts?</span></div>
+    </div>
+    <div class="post-actions"><span>👍 Like</span><span>💬 Comment</span><span>♻️ Repost</span></div>
+  </div>
+
+  <!-- 5. mid-band recruiting — expect: SIDE-EYE BADGE -->
+  <div class="feed-shared-update-v2" data-urn="urn:li:activity:7000000000000000005">
+    <div class="post-head"><div class="avatar">DR</div><div><div class="pname">Dana Reyes</div><div class="psub">Engineering Manager at Datawell</div></div></div>
+    <div class="feed-shared-update-v2__description-wrapper">
+      <div class="update-components-text"><span class="break-words">I’m excited to share that my team at Datawell is hiring a staff data engineer.<br><br>What you’d work on:<br>• Rebuilding our ingestion pipeline (Kafka to Iceberg)<br>• Killing 4 legacy Airflow DAGs that wake someone up every week<br>• Mentoring two earlier-career engineers<br><br>What we offer: real ownership, a manager who writes code every Friday, and comp posted in the listing ($185k–$220k base).<br><br>No take-home longer than 2 hours. Interview loop is 4 conversations. We tell you our concerns before the final round so you can address them directly.<br><br>Apply at the link or DM me — happy to answer blunt questions.</span></div>
+    </div>
+    <div class="post-actions"><span>👍 Like</span><span>💬 Comment</span><span>♻️ Repost</span></div>
+  </div>
+
+  <!-- 6. human conference recap — expect: UNTOUCHED -->
+  <div class="feed-shared-update-v2" data-urn="urn:li:activity:7000000000000000006">
+    <div class="post-head"><div class="avatar">AK</div><div><div class="pname">Asha Kulkarni</div><div class="psub">Platform engineer</div></div></div>
+    <div class="feed-shared-update-v2__description-wrapper">
+      <div class="update-components-text"><span class="break-words">Back from KubeCon. My feet hurt, I have 47 stickers I didn’t ask for, and I finally met three people I’d only known as GitHub avatars.<br><br>Real highlights: the eBPF deep dive on day 2 (the presenter live-debugged a kernel panic, absolute legend), and a hallway conversation about etcd compaction that fixed a prod issue we’ve had since March.<br><br>Lowlight: $19 airport sandwich.<br><br>If you were there and we didn’t get to talk, my DMs are open. Already counting down to Atlanta next year.</span></div>
+    </div>
+    <div class="post-actions"><span>👍 Like</span><span>💬 Comment</span><span>♻️ Repost</span></div>
+  </div>
+
+  <!-- 7. human debugging story — expect: UNTOUCHED -->
+  <div class="feed-shared-update-v2" data-urn="urn:li:activity:7000000000000000007">
+    <div class="post-head"><div class="avatar">JT</div><div><div class="pname">Jordan Tam</div><div class="psub">Staff engineer, payments</div></div></div>
+    <div class="feed-shared-update-v2__description-wrapper">
+      <div class="update-components-text"><span class="break-words">ok so i spent most of saturday chasing a race condition in our stripe webhook handler. turns out we were processing checkout.session.completed twice — once from the webhook and once from a cron job a contractor added in 2023 that nobody remembered. customers got double loyalty points for 14 months. tbh i only found it because a customer emailed asking why she had 9,412 points after spending $312. anyway. idempotency keys are now on every handler and i wrote a test that replays the last 1,000 events. cost of the bug: about $7,300 in rewards. cost of the fix: one saturday and my dignity lol</span></div>
+    </div>
+    <div class="post-actions"><span>👍 Like</span><span>💬 Comment</span><span>♻️ Repost</span></div>
+  </div>
+
+  <!-- 8. human honest hiring — expect: UNTOUCHED -->
+  <div class="feed-shared-update-v2" data-urn="urn:li:activity:7000000000000000008">
+    <div class="post-head"><div class="avatar">SW</div><div><div class="pname">Sam Whitfield</div><div class="psub">CTO at a 40-person startup</div></div></div>
+    <div class="feed-shared-update-v2__description-wrapper">
+      <div class="update-components-text"><span class="break-words">We’re hiring 2 backend engineers (Toronto, hybrid, $140k–$175k).<br><br>Real talk about this codebase: it’s 9 years old, the billing module scares everyone including me, and there’s a file called utils2.js that we don’t speak of. You’d be engineer #14. We ship weekly, on-call is paid, and nobody’s sent a Slack message after 6pm since I’ve been here.<br><br>No ping-pong table. The coffee is fine. PTO is actually unlimited-with-a-floor (3 week minimum, enforced).<br><br>DM me or apply via the link. If you ask about utils2.js in the interview I will be honest with you.</span></div>
+    </div>
+    <div class="post-actions"><span>👍 Like</span><span>💬 Comment</span><span>♻️ Repost</span></div>
+  </div>
+
+  <!-- 9. repost: human outer commentary wrapping QUOTED slop — expect: UNTOUCHED
+       (only the outer text is scored; the quoted author's slop is not the reposter's) -->
+  <div class="feed-shared-update-v2" data-urn="urn:li:activity:7000000000000000009">
+    <div class="post-head"><div class="avatar">RB</div><div><div class="pname">Riley Brooks</div><div class="psub">Data science, occasionally opinions</div></div></div>
+    <div class="feed-shared-update-v2__description-wrapper">
+      <div class="update-components-text"><span class="break-words">Sharing this one because the replies are fascinating — my take: most of these "lessons" are survivorship bias wearing a blazer, but number 4 genuinely matches what i saw at two startups. worth a skim for the comments alone.</span></div>
+    </div>
+    <div class="update-components-mini-update-v2" data-urn="urn:li:activity:7000000000000000010" style="border: 1px solid #ebebeb; border-radius: 8px; padding: 10px 12px; margin-top: 8px;">
+      <div class="post-head"><div class="avatar">GV</div><div><div class="pname">Grant Vision</div><div class="psub">Serial founder | Investor | Dreamer</div></div></div>
+      <div class="update-components-text"><span class="break-words">After 7 years in sales, I got promoted 5 times. 📈<br><br>Here are 7 truths nobody tells you:<br><br>1. Your manager is not your friend.<br><br>2. Comp plans are designed by people who will never carry a quota.<br><br>3. The best reps ask questions, not pitches.<br><br>4. Pipeline, persistence, and patience win every quarter.<br><br>5. Most people get this wrong.<br><br>6. Activity is a game-changer when talent is equal.<br><br>7. Discipline, consistency, and focus beat motivation, inspiration, and luck.<br><br>The harsh truth?<br><br>Save this post. What would you add?</span></div>
+    </div>
+    <div class="post-actions"><span>👍 Like</span><span>💬 Comment</span><span>♻️ Repost</span></div>
+  </div>
+
+  <!-- 10. non-English — expect: SKIPPED -->
+  <div class="feed-shared-update-v2" data-urn="urn:li:activity:7000000000000000011">
+    <div class="post-head"><div class="avatar">YS</div><div><div class="pname">佐藤 結衣</div><div class="psub">プロダクトマネージャー</div></div></div>
+    <div class="feed-shared-update-v2__description-wrapper">
+      <div class="update-components-text"><span class="break-words">本日、新しいプロジェクトを開始したことをお知らせします。長い間準備してきたもので、チーム全員がとても楽しみにしています。詳細は近日中に共有しますので、ぜひご期待ください。今後ともどうぞよろしくお願いいたします。皆様の応援が私たちの原動力です。</span></div>
+    </div>
+    <div class="post-actions"><span>👍 Like</span><span>💬 Comment</span><span>♻️ Repost</span></div>
+  </div>
+
+  <!-- 11. too short — expect: SKIPPED -->
+  <div class="feed-shared-update-v2" data-urn="urn:li:activity:7000000000000000012">
+    <div class="post-head"><div class="avatar">LP</div><div><div class="pname">Lena Park</div><div class="psub">Design</div></div></div>
+    <div class="feed-shared-update-v2__description-wrapper">
+      <div class="update-components-text"><span class="break-words">Congrats to the team — huge launch day! 🎉</span></div>
+    </div>
+    <div class="post-actions"><span>👍 Like</span><span>💬 Comment</span><span>♻️ Repost</span></div>
+  </div>
+
+</div>
+</main>
+
+<p class="harness-note">dev harness · mock feed using LinkedIn's real class names · run <code>SlopShield.extractor.debugScan()</code> in the console</p>
+
+<script>
+  // chrome.* stub + forceRun — MUST run before the content scripts load.
+  window.SlopShield = { config: { forceRun: true, debug: true } };
+  (() => {
+    const stores = { sync: {}, local: {} };
+    const listeners = [];
+    const area = (name) => ({
+      get: (defaults) => Promise.resolve(Object.assign({}, defaults, stores[name])),
+      set: (obj) => {
+        const changes = {};
+        for (const k of Object.keys(obj)) {
+          changes[k] = { oldValue: stores[name][k], newValue: obj[k] };
+          stores[name][k] = obj[k];
+        }
+        listeners.forEach((fn) => { try { fn(changes, name); } catch (e) {} });
+        return Promise.resolve();
+      },
+    });
+    window.chrome = {
+      storage: { sync: area('sync'), local: area('local'), onChanged: { addListener: (fn) => listeners.push(fn) } },
+      runtime: { id: 'harness' },
+    };
+  })();
+</script>
+
+<!-- Same order as manifest.json — keep in sync. -->
+<script src="../content/wordlists.js"></script>
+<script src="../content/signals.js"></script>
+<script src="../content/scorer.js"></script>
+<script src="../content/extractor.js"></script>
+<script src="../content/redactor.js"></script>
+<script src="../content/content.js"></script>
+
+<script>
+  // Wire the harness bar through the SAME storage path the real popup uses.
+  const $ = (id) => document.getElementById(id);
+  $('hb-sens').addEventListener('input', (e) => {
+    $('hb-sensv').textContent = e.target.value;
+    chrome.storage.sync.set({ sensitivity: Number(e.target.value) });
+  });
+  $('hb-tone').addEventListener('change', (e) => chrome.storage.sync.set({ tone: e.target.value }));
+  $('hb-enabled').addEventListener('change', (e) => chrome.storage.sync.set({ enabled: e.target.checked }));
+  $('hb-human').addEventListener('change', (e) => chrome.storage.sync.set({ humanBadge: e.target.checked }));
+</script>
+
+</body>
+</html>
