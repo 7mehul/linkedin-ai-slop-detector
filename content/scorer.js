@@ -79,7 +79,7 @@
   // --- skip gates ------------------------------------------------------------
 
   SS.shouldSkip = function shouldSkip(text) {
-    const t = (text || '').trim();
+    const t = String(text == null ? '' : text).trim();
     if (t.length < MIN_CHARS) return { skip: true, reason: 'too-short' };
     const allLetters = (t.match(/\p{L}/gu) || []).length;
     if (allLetters === 0) return { skip: true, reason: 'no-letters' };
@@ -91,7 +91,7 @@
   // --- precompute ------------------------------------------------------------
 
   function precompute(text) {
-    const raw = (text || '').trim().slice(0, MAX_ANALYZED_CHARS);
+    const raw = String(text == null ? '' : text).trim().slice(0, MAX_ANALYZED_CHARS);
     // Apostrophe-normalized lowercase view — LinkedIn emits curly ’, every
     // phrase list and the contraction regex assume straight '.
     const lower = raw.toLowerCase().replace(/[’‘]/g, "'");

@@ -116,6 +116,20 @@ assert(
 );
 assert(!SS.shouldSkip(FIXTURES[0].text).skip, 'normal English post must not skip');
 
+// Robustness: malformed / non-string inputs must never throw.
+for (const bad of [null, undefined, 12345, {}, [], NaN, '', '   ', '🚀'.repeat(50)]) {
+  let threw = false;
+  let total;
+  try {
+    SS.shouldSkip(bad);
+    total = SS.scorePost(bad).total;
+  } catch (e) {
+    threw = true;
+  }
+  assert(!threw, `scorePost/shouldSkip must not throw on ${JSON.stringify(bad)}`);
+  assert(total >= 0 && total <= 100 && !Number.isNaN(total), `score in range for ${JSON.stringify(bad)}`);
+}
+
 // Signal sanity: every signal returns [0, 1] on every fixture.
 for (const f of FIXTURES) {
   const { breakdown } = SS.scorePost(f.text);

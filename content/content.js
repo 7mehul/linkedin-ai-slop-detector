@@ -218,10 +218,32 @@
     pendingRoots.add(document.body); // initial sweep: posts predate any mutation
     schedule();
 
+    const isOurs = (node) => {
+      const cls = node.nodeType === 1 && typeof node.className === 'string' ? node.className : '';
+      return cls.indexOf('slopshield-') !== -1;
+    };
+
     const observer = new MutationObserver((mutations) => {
       for (const m of mutations) {
+        // A mutation that adds/removes our own UI is self-inflicted churn — skip it,
+        // otherwise injecting an overlay would re-trigger processing of its own post.
+        let ours = false;
         for (const node of m.addedNodes) {
-          if (node.nodeType === 1) pendingRoots.add(node);
+          if (isOurs(node)) {
+            ours = true;
+            continue;
+          }
+          if (node.nodeType === 1) pendingRoots.add(node); // a whole new post subtree
+        }
+        for (const node of m.removedNodes) if (isOurs(node)) ours = true;
+        if (ours) continue;
+        // The mutation target locates the owning post even when LinkedIn recycles a
+        // container in place (swaps inner content, including text-only changes) — so
+        // the post gets reprocessed and the URN-staleness check runs.
+        const tgt = m.target;
+        if (tgt && tgt.nodeType === 1 && tgt.closest) {
+          const host = tgt.closest(SS.SELECTORS.POST_CONTAINER);
+          if (host) pendingRoots.add(host);
         }
       }
       if (pendingRoots.size) schedule();
