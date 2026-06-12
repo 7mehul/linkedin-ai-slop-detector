@@ -145,6 +145,32 @@
     return 'human';
   };
 
+  // Choose the verdict stamp for a post. Candidates = signal-specific lines for
+  // the post's top-3 firing signals (so a stamp can only name a tell the post
+  // actually has) PLUS the generic pool (so signature lines like CERTIFIED SLOP
+  // stay in rotation). URN-seeded → stable across re-renders.
+  // breakdown must be the sorted array from scorePost(). Returns {text, signal}.
+  SS.pickVerdict = function pickVerdict(urn, tone, breakdown) {
+    const pack = SS.VERDICTS[tone] || SS.VERDICTS.medium;
+    const rand = SS.mulberry32(SS.fnv1a(String(urn)));
+    const candidates = [];
+    const fired = (breakdown || []).filter((r) => r.weighted > 0).slice(0, 3);
+    for (const row of fired) {
+      const pool = pack[row.key];
+      if (pool) for (const line of pool) candidates.push({ text: line, signal: row.key });
+    }
+    for (const line of pack.generic) candidates.push({ text: line, signal: null });
+    return candidates[Math.floor(rand() * candidates.length)];
+  };
+
+  // Plain-English names of the top firing signals — the "flagged for: …" line.
+  SS.topReasons = function topReasons(breakdown, n) {
+    return (breakdown || [])
+      .filter((r) => r.weighted > 0)
+      .slice(0, n || 2)
+      .map((r) => r.name);
+  };
+
   SS.DEFAULT_SETTINGS = {
     enabled: true,
     sensitivity: 65,

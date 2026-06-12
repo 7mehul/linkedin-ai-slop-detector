@@ -252,44 +252,76 @@
 
   // ---------------------------------------------------------------------------
   // Verdict packs. Rule for every line: roast the WRITING, never the writer.
-  // Picked per-post via URN-seeded RNG so the same post always wears the same stamp.
+  // Each tone has a `generic` pool (accurate for any slop) plus pools keyed by
+  // signal. A signal-specific verdict (e.g. EM-DASH CRIME SCENE) is only ever
+  // eligible when that signal is one of the post's top firing signals — so the
+  // stamp can never accuse a post of a tell it doesn't have. The pick is
+  // URN-seeded, so the same post always wears the same stamp. See SS.pickVerdict.
+  // Signal keys must match SS.SIGNALS[].key in signals.js.
   // ---------------------------------------------------------------------------
   SS.VERDICTS = {
-    mild: [
-      'LIKELY SLOP',
-      'AI-FLAVORED',
-      'SUSPICIOUSLY POLISHED',
-      'GHOSTWRITTEN BY A ROBOT?',
-      'CERTIFIED CORPORATE CADENCE',
-      'THE ALGORITHM WROTE THIS ONE',
-      'BEIGE PROSE DETECTED',
-      'TEMPLATE ENERGY',
-      'FOCUS-GROUPED TO DEATH',
-      'ASSEMBLED FROM PARTS',
-    ],
-    medium: [
-      'CERTIFIED SLOP',
-      'ChatGPT TOUCHED THIS',
-      'THOUGHT LEADERSHIP™ DETECTED',
-      'BROETRY VIOLATION',
-      'EM-DASH CRIME SCENE',
-      'THIS POST HAS BEEN RETURNED TO THE VOID',
-      'ENGAGEMENT BAIT, DO NOT FEED',
-      'WRITTEN BY A BLAZER',
-      'PROMPT RESIDUE DETECTED',
-      'STOCK PHOTO IN TEXT FORM',
-    ],
-    unhinged: [
-      'WEAPONS-GRADE SLOP',
-      'A ROBOT WEARING A LANYARD WROTE THIS',
-      "THE PROMPT WAS 'WRITE A LINKEDIN POST'",
-      'DELVE DETECTED. POST TERMINATED.',
-      'THIS POST FOLDED ITS OWN LAUNDRY',
-      '100% ORGANIC FREE-RANGE SLOP',
-      'SOMEWHERE, AN EM-DASH FACTORY IS RUNNING OVERTIME',
-      'LET THAT SINK IN? NO.',
-      'THIS POST IS WEARING A SUIT TO THE BEACH',
-      'GPT WROTE THIS AND IT WASN\'T EVEN TRYING',
-    ],
+    mild: {
+      generic: [
+        'LIKELY SLOP',
+        'AI-FLAVORED',
+        'SUSPICIOUSLY POLISHED',
+        'CERTIFIED CORPORATE CADENCE',
+        'THE ALGORITHM WROTE THIS ONE',
+        'TEMPLATE ENERGY',
+        'FOCUS-GROUPED TO DEATH',
+        'ASSEMBLED FROM PARTS',
+      ],
+      broetry: ['ONE. SENTENCE. PER LINE.', 'BROETRY, BUT POLITE'],
+      slopPhrases: ["I'VE READ THIS HOOK BEFORE", 'OPENS WITH A TEMPLATE'],
+      emDash: ['FOND OF THE EM-DASH', 'DASH-CURIOUS'],
+      aiVocab: ["SOMEONE SAID 'DELVE'", 'THE THESAURUS WAS HERE'],
+      emojiBullets: ['TASTEFUL EMOJI BULLETS', '🚀 A LITTLE MUCH'],
+      baitCloser: ["ENDS WITH 'THOUGHTS?'", 'POLITELY FISHING FOR LIKES'],
+      burstiness: ['SUSPICIOUSLY EVEN RHYTHM', 'METRONOME-ADJACENT'],
+      contractions: ['ALLERGIC TO CONTRACTIONS', 'FORMAL TO A FAULT'],
+      specificity: ['NAMES NO NAMES', 'VAGUE BUT EARNEST'],
+    },
+    medium: {
+      generic: [
+        'CERTIFIED SLOP',
+        'ChatGPT TOUCHED THIS',
+        'THOUGHT LEADERSHIP™ DETECTED',
+        'THIS POST HAS BEEN RETURNED TO THE VOID',
+        'WRITTEN BY A BLAZER',
+        'PROMPT RESIDUE DETECTED',
+        'STOCK PHOTO IN TEXT FORM',
+      ],
+      broetry: ['BROETRY VIOLATION', 'THE ENTER KEY SUFFERED HERE'],
+      slopPhrases: ['ASSEMBLED FROM LINKEDIN PARTS', 'HOOK, FILLER, CLOSER, REPEAT'],
+      emDash: ['EM-DASH CRIME SCENE', 'PUT THE EM-DASH DOWN'],
+      aiVocab: ['DELVE DETECTED', 'CERTIFIED THESAURUS ABUSE'],
+      emojiBullets: ['🚀 EMOJI BULLET HELL', 'DEATH BY 🔥✅💡'],
+      baitCloser: ['ENGAGEMENT BAIT, DO NOT FEED', 'LET THAT SINK IN? NO.'],
+      burstiness: ['METRONOME PROSE', 'EVERY SENTENCE THE SAME LENGTH'],
+      contractions: ['ALLERGIC TO CONTRACTIONS', "REFUSES TO SAY 'DON'T'"],
+      contrastHook: ["IT'S NOT X. IT'S TIRESOME.", 'FALSE BINARY DETECTED'],
+      ruleOfThree: ['FIRST. SECOND. THIRD. STOP.', 'TRIADS ALL THE WAY DOWN'],
+      specificity: ['A PARABLE ABOUT NOBODY', 'ZERO VERIFIABLE FACTS'],
+    },
+    unhinged: {
+      generic: [
+        'WEAPONS-GRADE SLOP',
+        'A ROBOT WEARING A LANYARD WROTE THIS',
+        "THE PROMPT WAS 'WRITE A LINKEDIN POST'",
+        'THIS POST FOLDED ITS OWN LAUNDRY',
+        '100% ORGANIC FREE-RANGE SLOP',
+        'THIS POST IS WEARING A SUIT TO THE BEACH',
+      ],
+      broetry: ['THE ENTER KEY IS FILING A RESTRAINING ORDER', 'ONE SENTENCE PER LINE, A WHOLE LIFE WASTED'],
+      slopPhrases: ['BUILT ENTIRELY FROM REHEATED HOOKS', 'EVERY SENTENCE IS A LINKEDIN COMMENT'],
+      emDash: ['SOMEWHERE, AN EM-DASH FACTORY IS RUNNING OVERTIME', 'THIS POST ENDANGERED THE HYPHEN SUPPLY'],
+      aiVocab: ['DELVE DETECTED. POST TERMINATED.', "IT SAID 'TAPESTRY' AND I SAW RED"],
+      emojiBullets: ['🚀 THE EMOJIS ARE LOAD-BEARING', 'A POWERPOINT ESCAPED INTO THE FEED'],
+      baitCloser: ["'AGREE?' NO.", 'BEGGING FOR ENGAGEMENT IN BROAD DAYLIGHT'],
+      burstiness: ['EVERY SENTENCE CUT TO THE SAME LENGTH BY A MACHINE', 'METRONOMICALLY, RELENTLESSLY EVEN'],
+      contractions: ["PHYSICALLY CANNOT TYPE 'DON'T'", 'FORMAL ENOUGH TO OFFICIATE A WEDDING'],
+      contrastHook: ["IT'S NOT A POST. IT'S A CRY FOR HELP.", 'FALSE BINARIES AS A LIFESTYLE'],
+      specificity: ['A PARABLE ABOUT A MENTOR WHO NEVER EXISTED', 'ZERO FACTS, MAXIMUM CONFIDENCE'],
+    },
   };
 })();

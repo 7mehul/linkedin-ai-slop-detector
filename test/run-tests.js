@@ -156,10 +156,47 @@ for (const f of FIXTURES) {
     [a(), a(), a()].join() === [b(), b(), b()].join(),
     'mulberry32 must be deterministic per seed'
   );
-  const verdicts = SS.VERDICTS.medium;
-  const idx1 = Math.floor(SS.mulberry32(seedOf('urn:x'))() * verdicts.length);
-  const idx2 = Math.floor(SS.mulberry32(seedOf('urn:x'))() * verdicts.length);
-  assert(idx1 === idx2, 'verdict pick must be stable per URN');
+}
+
+// Verdict ↔ signal matching: a signal-specific stamp may ONLY appear when that
+// signal actually fired. This is the fix for "EM-DASH CRIME SCENE on a post with
+// no em-dashes". Build a reverse map verdict→signal from the packs, then check
+// every fixture's chosen verdict against what fired.
+{
+  const verdictSignal = {}; // verdict text → signal key (generic lines excluded)
+  for (const tone of Object.keys(SS.VERDICTS)) {
+    for (const key of Object.keys(SS.VERDICTS[tone])) {
+      if (key === 'generic') continue;
+      for (const line of SS.VERDICTS[tone][key]) verdictSignal[line] = key;
+    }
+  }
+
+  for (const f of FIXTURES) {
+    const { breakdown } = SS.scorePost(f.text);
+    const firedKeys = new Set(breakdown.filter((r) => r.weighted > 0).map((r) => r.key));
+    for (const tone of Object.keys(SS.VERDICTS)) {
+      const v1 = SS.pickVerdict(f.name, tone, breakdown);
+      const v2 = SS.pickVerdict(f.name, tone, breakdown);
+      assert(v1.text === v2.text, `${f.name}/${tone}: verdict must be stable per urn+tone`);
+      const named = verdictSignal[v1.text];
+      if (named) {
+        assert(
+          firedKeys.has(named),
+          `${f.name}/${tone}: verdict "${v1.text}" names ${named}, which did not fire`
+        );
+      }
+    }
+  }
+
+  // The reported regression: thrilled-bullets has no em-dashes, so the em-dash
+  // signal must not fire — which structurally makes an em-dash verdict impossible.
+  const tb = SS.scorePost(FIXTURES.find((f) => f.name === 'slop-thrilled-bullets').text);
+  const emDashRow = tb.breakdown.find((r) => r.key === 'emDash');
+  assert(!emDashRow || emDashRow.weighted === 0, 'thrilled-bullets must not fire the em-dash signal');
+
+  // topReasons surfaces the plain-English "flagged for" line.
+  const reasons = SS.topReasons(tb.breakdown, 2);
+  assert(reasons.length === 2 && reasons.every((s) => typeof s === 'string'), 'topReasons must name 2 signals');
 }
 
 // Scoring determinism + idempotence.

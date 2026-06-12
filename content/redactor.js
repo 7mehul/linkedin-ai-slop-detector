@@ -9,9 +9,10 @@
 
   const rngFor = (urn) => SS.mulberry32(SS.fnv1a(String(urn)));
 
-  function verdictFor(urn, tone) {
-    const pack = SS.VERDICTS[tone] || SS.VERDICTS.medium;
-    return pack[Math.floor(rngFor(urn)() * pack.length) % pack.length];
+  // Thin wrapper over the pure engine picker (scorer.js) so the verdict matches
+  // what actually fired in the post.
+  function verdictFor(urn, tone, breakdown) {
+    return SS.pickVerdict(urn, tone, breakdown).text;
   }
 
   const el = (tag, className, text) => {
@@ -47,7 +48,7 @@
   // --- full redaction ---------------------------------------------------------
 
   function buildOverlay(container, info, settings, state) {
-    const { urn, hostEl, score } = info;
+    const { urn, hostEl, score, breakdown } = info;
     hostEl.classList.add('slopshield-host', 'slopshield-host-redacted');
 
     const overlay = el('div', 'slopshield-overlay');
@@ -67,7 +68,11 @@
     }
 
     const stamp = el('div', 'slopshield-stamp');
-    stamp.appendChild(el('span', 'slopshield-verdict', verdictFor(urn, settings.tone)));
+    stamp.appendChild(el('span', 'slopshield-verdict', verdictFor(urn, settings.tone, breakdown)));
+    const reasons = SS.topReasons(breakdown, 2);
+    if (reasons.length) {
+      stamp.appendChild(el('span', 'slopshield-reasons', `flagged for: ${reasons.join(' · ')}`));
+    }
     stamp.appendChild(el('span', 'slopshield-meta', `SLOP SCORE: ${score}/100 · TAP TO REVEAL`));
     if (!state.animated.has(urn)) {
       stamp.classList.add('slopshield-slam');
