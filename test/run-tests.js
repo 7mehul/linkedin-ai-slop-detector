@@ -88,9 +88,10 @@ assert(SS.tierFor(20, 65) === 'human', 'tierFor(20, 65) must be human');
 // highlight. humanBadge has been removed from the settings model entirely.
 assert(SS.PRESETS.length === 3, 'three presets');
 assert(SS.presetForSensitivity(40).key === 'chill', 'sensitivity 40 → chill');
-assert(SS.presetForSensitivity(65).key === 'default', 'sensitivity 65 → default');
+assert(SS.presetForSensitivity(80).key === 'default', 'sensitivity 80 → default');
 assert(SS.presetForSensitivity(100).key === 'robot', 'sensitivity 100 → robot');
-assert(SS.presetForSensitivity(58).key === 'default', 'sensitivity 58 → nearest is default');
+assert(SS.presetForSensitivity(75).key === 'default', 'sensitivity 75 → nearest is default');
+assert(SS.thresholds(SS.DEFAULT_SETTINGS.sensitivity).redact === 60, 'default mode redacts at ≥ 60');
 assert(!('humanBadge' in SS.DEFAULT_SETTINGS), 'humanBadge removed from default settings');
 assert(SS.thresholds(40).redact === 80, 'chill preset redacts at ≥ 80');
 assert(SS.thresholds(100).redact === 50, 'robot preset redacts at ≥ 50');

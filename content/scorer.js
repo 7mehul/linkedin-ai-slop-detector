@@ -142,7 +142,7 @@
 
   // --- thresholds ------------------------------------------------------------
 
-  // Higher sensitivity → lower threshold → meaner. Default 65 → redact at 67.5.
+  // Higher sensitivity → lower threshold → meaner. Default 80 → redact at 60.
   SS.thresholds = function thresholds(sensitivity) {
     const s = Math.max(0, Math.min(100, Number(sensitivity) || 0));
     const redact = 75 - (s - 50) * 0.5;
@@ -201,7 +201,7 @@
 
   SS.DEFAULT_SETTINGS = {
     enabled: true,
-    sensitivity: 65,
+    sensitivity: 80,
     tone: 'medium',
   };
 
@@ -209,11 +209,12 @@
   // "vibes with math on top", so a calibrated dial would be lying about its
   // precision. Each maps to a sensitivity the engine already understands:
   //   chill  → redact ≥ 80 (only egregious slop)
-  //   default→ redact ≥ 67.5
+  //   default→ redact ≥ 60 (calibrated against live 2026 feeds, where real
+  //            slop lands 50-70; the 2020-era dialect scored higher)
   //   robot  → redact ≥ 50 (maximum paranoia)
   SS.PRESETS = [
     { key: 'chill', label: 'Chill', sensitivity: 40 },
-    { key: 'default', label: 'Default', sensitivity: 65 },
+    { key: 'default', label: 'Default', sensitivity: 80 },
     { key: 'robot', label: "Everyone's a Robot", sensitivity: 100 },
   ];
 
