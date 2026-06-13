@@ -97,9 +97,31 @@
     'am i wrong?',
     'tag someone who',
     "if this resonated",
+    // Modern engagement-bait closers (2026 dialect): polls, prompts, CTAs.
+    "let's discuss",
+    'let me know your thoughts',
+    'let me know below',
+    'which one',
+    'weigh in',
+    'vote below',
+    'cast your vote',
+    "i'm curious",
+    'curious to hear',
+    'sound off',
+    'comment below',
   ];
 
   SS.GENERIC_PHRASES = [
+    // Modern slop pivots (2026 dialect): the structural filler around capability
+    // matrices and "Not X / But Y" reframes.
+    'asking the wrong question',
+    "here's what that",
+    'the interesting part',
+    'an important distinction',
+    'remove friction',
+    'removes friction',
+    'the most successful',
+    "here's what that looks like",
     'game-changer',
     'game changer',
     "in today's fast-paced world",

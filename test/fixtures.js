@@ -36,6 +36,16 @@ const FIXTURES = [
     text:
       'After 7 years in sales, I got promoted 5 times. 📈\n\nHere are 7 truths nobody tells you:\n\n1. Your manager is not your friend.\n\n2. Comp plans are designed by people who will never carry a quota.\n\n3. The best reps ask questions, not pitches.\n\n4. Pipeline, persistence, and patience win every quarter.\n\n5. Most people get this wrong.\n\n6. Activity is a game-changer when talent is equal.\n\n7. Discipline, consistency, and focus beat motivation, inspiration, and luck.\n\nThe harsh truth?\n\nMost people will read this list and change nothing.\n\nDon’t be most people.\n\nSave this post. You will want it later.\n\nWhat would you add?',
   },
+  {
+    // The 2026 dialect: capability-matrix listicle + "Not/But" reframe + lettered
+    // engagement poll + down-arrow CTA. Maxes broetry and emoji bullets but its
+    // tells are the modern ones, so the old phrase lists scored it only ~35.
+    // Regression guard for that miss.
+    name: 'slop-capability-matrix-poll',
+    expect: 'slop',
+    text:
+      'Most teams are asking the wrong question about AI.\n\nNot:\n\n"Can AI replace your team?"\n\nBut:\n\n"How can AI make your team more effective?"\n\nHere’s what that could look like across the team:\n\nProduct\n\n✅ Refine the roadmap\n✅ Analyze customer feedback\n✅ Identify emerging trends\n\nEngineering\n\n✅ Generate boilerplate code\n✅ Review pull requests\n✅ Accelerate debugging\n\nThe interesting part?\n\nNone of these replace the role.\n\nThey remove friction from the role.\n\nThat’s an important distinction.\n\nThe future may not be:\n\nHuman vs AI\n\nIt may be:\n\nHuman expertise + AI acceleration\n\nI’m curious:\n\nWhich role benefits the most over the next 3 years?\n\nA) Product\n\nB) Engineering\n\nC) Design\n\nD) Operations\n\n👇 Let’s discuss.',
+  },
 
   // --------------------------------------------------------------- human ----
   {

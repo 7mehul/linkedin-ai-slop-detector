@@ -125,6 +125,10 @@
         ];
         let hits = 0;
         for (const re of patterns) if (re.test(t)) hits++;
+        // Colon-newline contrast framing, the 2026 dialect's favourite:
+        //   "Not:\n  X \n But:\n  Y"  and  "may not be:\n ... it may be:\n ..."
+        if (/(^|\n)\s*not:\s*(\n|$)/.test(t) && /(^|\n)\s*but:\s*(\n|$)/.test(t)) hits++;
+        if (/\bmay not be:?\s*\n/.test(t) && /\bit may be:?\s*\n/.test(t)) hits++;
         return clamp01(hits * 0.4);
       },
     },
@@ -179,12 +183,22 @@
       name: 'engagement-bait closer',
       weight: 7,
       fn(pre) {
-        const lastTwo = pre.nonEmpty.slice(-2).join('\n');
-        const phraseHit = W.CLOSER_PHRASES.some((p) => lastTwo.includes(p));
+        // Closers cluster near the end, but a CTA + lettered poll can run the
+        // last several lines, so widen the net beyond the final two.
+        const tail = pre.nonEmpty.slice(-4).join('\n');
+        const phraseHit = W.CLOSER_PHRASES.some((p) => tail.includes(p));
         const recycleHit = pre.raw.includes('♻');
-        if (phraseHit && recycleHit) return 1;
-        if (phraseHit || recycleHit) return 0.8;
-        return 0;
+        const arrowHit = /👇|⬇/u.test(pre.raw); // down-arrow "comment here" CTA
+        // Lettered engagement poll: 3+ options like "A) ...", "(b) ...", "c. ...".
+        let pollOpts = 0;
+        for (const line of pre.nonEmpty) if (/^\s*\(?[a-f][).]\s/.test(line)) pollOpts++;
+        const pollHit = pollOpts >= 3;
+        let score = 0;
+        if (phraseHit) score += 0.8;
+        if (recycleHit) score += 0.6;
+        if (arrowHit) score += 0.5;
+        if (pollHit) score += 0.7;
+        return clamp01(score);
       },
     },
     {
