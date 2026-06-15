@@ -9,52 +9,48 @@ upload is built with `npm run package` and lands in `dist/`.
 
 **Name** (from manifest): SlopShield
 
-**Summary** (from manifest description, 121/132 chars):
-Redacts LinkedIn slop with a censor bar and a snarky stamp. Detects the dialect, not the AI. Nothing leaves your browser.
+**Summary** (113/132 chars, paste into the Summary field):
+Censors the AI slop in your LinkedIn feed behind a black bar with a snarky verdict. Runs entirely in your browser.
 
 **Detailed description** (paste as plain text):
 
 ```
-SlopShield scans your LinkedIn feed and slams a censor-bar redaction over posts
-written in the "AI-slop dialect", complete with a snarky verdict stamp, a slop
-score out of 100, and the exact reasons the post was flagged.
+Your LinkedIn feed is 90% slop. SlopShield does something about it.
 
-THE HONEST PITCH
+Every "I'm thrilled to announce", every broetry humble-brag, every ✅ emoji
+listicle that ends in "Agree? 👇" gets exactly what it deserves: a black censor
+bar, a snarky verdict stamp, and a slop score out of 100.
 
-SlopShield does not detect AI. Nothing can, reliably. It detects a writing
-style: broetry line breaks, "I'm thrilled to announce", em-dash overload,
-delve-grade vocabulary, emoji bullet listicles, and "Agree?" engagement bait.
-That style correlates heavily with AI-assisted posting, and it also catches
-sincere humans who write like that on purpose. That's the bit. False positives
-are a feature, not a bug.
+HOW IT WORKS
 
-WHAT IT DOES
+As you scroll, SlopShield reads each post and scores it against 12 heuristics
+for the "LinkedIn-slop dialect": broetry line breaks, em-dash overload,
+delve-grade vocabulary, engagement-bait polls, contrast-hook framing, and more.
+High scorers get redacted behind a classified-document censor bar, stamped with
+the verdict ("CERTIFIED SLOP", "BROETRY VIOLATION", "EM-DASH CRIME SCENE") and
+the exact reasons it got flagged. Tap to reveal the post underneath. Tap again
+to re-redact.
 
-- Scores every post in your feed from 0 to 100 using 12 local heuristics
-- Redacts high scorers behind a classified-document censor bar with a verdict
-  stamp ("CERTIFIED SLOP", "BROETRY VIOLATION", "THOUGHT LEADERSHIP(TM)
-  DETECTED") and a case number
-- Every stamp explains itself: "flagged for: broetry formatting, slop phrases"
-- Tap any redaction to reveal the post; re-redact it just as easily
-- Mid-scorers get a side-eye badge with a full signal breakdown instead
+YOU'RE IN CONTROL
+
 - Three modes: Chill, Default, and Everyone's a Robot
 - Three verdict tones: Mild, Medium, Unhinged
-- A Feed Report in the popup: posts redacted this session, your feed's top
-  crime, and the worst offender's score
+- A Feed Report that tallies how much slop you've survived this session
 
-PRIVACY, FOR REAL
+THE HONEST PART
 
-Everything runs locally inside your browser tab. SlopShield makes zero network
-requests. No analytics, no telemetry, no accounts, no data collection of any
-kind. Post text is scored in memory and discarded. The only thing stored is
-your settings and a redaction counter, in Chrome's local extension storage.
-The code is open source.
+SlopShield does not detect AI. Nothing reliably can. It detects a writing style
+that correlates heavily with AI-assisted posting, and yes, it will occasionally
+flag a sincere human who happens to write like a press release. That's the bit.
+It judges the writing, never the writer.
 
-THE FINE PRINT
+PRIVACY
 
-Scores are vibes with math on top. Roast posts, not people. SlopShield judges
-writing style, never authors, and should not be used to accuse anyone of
-anything. It will flag earnest humans. It may flag you.
+Everything runs locally in your browser. Zero network calls. No analytics. No
+accounts. No data collection of any kind. There is literally no server for your
+data to go to. Fully open source.
+
+Roast posts, not people.
 
 SlopShield is an independent project. It is not affiliated with, endorsed by,
 or sponsored by LinkedIn Corporation.
